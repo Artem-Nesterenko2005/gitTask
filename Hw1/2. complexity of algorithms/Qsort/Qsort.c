@@ -17,7 +17,7 @@ int main()
     printf("Initial Array ");
     for (int symbolNumber = 0; symbolNumber < LENGTH_ARRAY; ++symbolNumber)
     {
-        array[symbolNumber] = rand() % 100;
+        array[symbolNumber] = rand() % 99;
         printf("%d, ", array[symbolNumber]);
     }
     qsorting(array, LENGTH_ARRAY);
