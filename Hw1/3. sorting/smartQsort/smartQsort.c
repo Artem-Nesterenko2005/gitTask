@@ -99,6 +99,7 @@ int randomiser(int array[], int length)
     for (int counter = 0; counter < length; ++counter)
     {
         array[counter] = rand() % 200;
+        printf("%d ", array[counter]);
     }
     return array;
 }
@@ -111,11 +112,13 @@ int main()
         return 0;
     }
     int array[LIMITATION_FOR_ARRAY] = { 0 };
+    printf("Source array: ");
     randomiser(array, LIMITATION_FOR_ARRAY);
     qsorting(array, 0, LIMITATION_FOR_ARRAY - 1);
+    printf("\n\nSorted array: ");
     for (int i = 0; i < 100; ++i)
     {
-        printf("%d \n", array[i]);
+        printf("%d ", array[i]);
     }
 }
 
