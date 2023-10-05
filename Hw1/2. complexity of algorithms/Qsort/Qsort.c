@@ -4,30 +4,6 @@
 
 #define LENGTH_ARRAY 20
 
-int main()
-{
-    int programmTest = test();
-    if (programmTest != 1)
-    {
-        printf("Error programm test");
-        return 1;
-    }
-    srand(time(NULL));
-    int array[LENGTH_ARRAY] = { 0 };
-    printf("Initial Array ");
-    for (int symbolNumber = 0; symbolNumber < LENGTH_ARRAY; ++symbolNumber)
-    {
-        array[symbolNumber] = rand() % 99;
-        printf("%d, ", array[symbolNumber]);
-    }
-    qsorting(array, LENGTH_ARRAY);
-    printf("\nConverted array ");
-    for (int counter = 0; counter < LENGTH_ARRAY; ++counter)
-    {
-        printf("%d, ", array[counter]);
-    }
-}
-
 int qsorting(int array[], int length)
 {
     int largeNumberCounter = 0;
@@ -96,4 +72,28 @@ int test()
     }
     int resultTest = correctTestArray1 * correctTestArray2 * correctTestArray3;
     return resultTest;
+}
+
+int main()
+{
+    int programmTest = test();
+    if (programmTest != 1)
+    {
+        printf("Error programm test");
+        return 1;
+    }
+    srand(time(NULL));
+    int array[LENGTH_ARRAY] = { 0 };
+    printf("Initial Array ");
+    for (int symbolNumber = 0; symbolNumber < LENGTH_ARRAY; ++symbolNumber)
+    {
+        array[symbolNumber] = rand() % 99;
+        printf("%d, ", array[symbolNumber]);
+    }
+    qsorting(array, LENGTH_ARRAY);
+    printf("\nConverted array ");
+    for (int counter = 0; counter < LENGTH_ARRAY; ++counter)
+    {
+        printf("%d, ", array[counter]);
+    }
 }
