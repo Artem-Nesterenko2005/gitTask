@@ -4,6 +4,7 @@
 
 #include "../stack/stack.h"
 #include "../testStack/testStack.h"
+#include "bracketsBalance.h"
 
 #define LIMITATION_OF_STRING 1000
 
