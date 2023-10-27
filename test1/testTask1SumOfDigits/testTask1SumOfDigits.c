@@ -1,5 +1,4 @@
 ﻿#include <stdio.h>
-#include <string.h>
 #include <math.h>
 
 #define LENGTH_ARRAY 8
