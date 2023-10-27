@@ -2,14 +2,14 @@
 
 #include <stdbool.h>
 
-//Тест функции push для стека
+//Stack push function test
 bool testPushAndTopStack();
 
-//Тест функции pop для стека
+//Pop function test for stack
 bool testPopAndTopStack();
 
-//Тест функции isEmpty для стека
+//Test of the isEmpty function on the stack
 bool testIsEmpty();
 
-//Итоговый тест всех функций
+//Final test of all functions
 bool testStack();

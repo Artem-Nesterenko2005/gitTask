@@ -2,17 +2,17 @@
 
 #include <stdbool.h>
 
-//Струкутра для стека
+//Struct for stack
 typedef struct Stack Stack;
 
-//Помещает элемент на верх стека
+//Places an element on the top of the stack
 Stack* push(Stack* top, char data);
 
-//Проверяет стек на содержаение элементов
+//Checks the stack for elements content
 bool isEmpty(Stack* top);
 
-//Удаляет элемент с верха стека
+//Removes an element from the top of the stack
 Stack* pop(Stack* top);
 
-//Указывает на данные с верха стека
+//Points to data from the top of the stack
 int top(Stack* stack);

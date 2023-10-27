@@ -4,6 +4,8 @@
 #include <stdbool.h>
 
 #include "../stack/stack.h"
+#include "../testStack/testStack.h"
+#include "postfixCalculator.h"
 
 #define LIMITATION_OF_STRING 1000
 #define ENCODING_CONVERSION 48
