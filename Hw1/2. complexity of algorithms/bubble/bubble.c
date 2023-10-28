@@ -2,12 +2,16 @@
 #include <stdlib.h>
 #include <time.h>
 #include <malloc.h>
+#include <stdbool.h>
 
 #define ARRAY_LENGTH 100000
 #define AUXILIARY_ARRAY_LENGTH 10
 #define ARRAY_FOR_COUNT_SORT 100
+#define END_OF_PROGRAM 1
+#define ERROR_TESTS -1
+#define MEMORY_ERROR -2
 
-void bubbleSort(int array[], int length)
+void static bubbleSort(int array[], int length)
 {
     for (int iterationCounter = 0; iterationCounter < length - 1; ++iterationCounter)
     {
@@ -23,7 +27,7 @@ void bubbleSort(int array[], int length)
     }
 }
 
-void countSort(int array[], int length)
+void static countSort(int array[], int length)
 {
     int auxiliaryArray[ARRAY_FOR_COUNT_SORT] = { 0 };
     for (int indexFillingArray = 0; indexFillingArray <= length - 1; ++indexFillingArray)
@@ -47,7 +51,7 @@ void countSort(int array[], int length)
     }
 }
 
-int bubbleSortTest()
+bool static bubbleSortTest(void)
 {
     int testArray1[AUXILIARY_ARRAY_LENGTH] = { 543,12,34,54,85,12,543,65,12,43 };
     bubbleSort(testArray1, AUXILIARY_ARRAY_LENGTH);
@@ -71,7 +75,7 @@ int bubbleSortTest()
     return testResult;
 }
 
-int countSortTest()
+bool static countSortTest(void)
 {
     int testArray1[AUXILIARY_ARRAY_LENGTH] = { 53,12,34,54,85,12,53,65,12,43 };
     countSort(testArray1, AUXILIARY_ARRAY_LENGTH);
@@ -96,14 +100,14 @@ int countSortTest()
     return testResult;
 }
 
-int main()
+int main(void)
 {
     int resultBubbleSortTest = bubbleSortTest();
     int resultCountSortTest = countSortTest();
-    if (resultBubbleSortTest + resultCountSortTest != 36)
+    if (resultBubbleSortTest && resultCountSortTest)
     {
         printf("Error test");
-        return 0;
+        return ERROR_TESTS;
     }
 
     int* arrayForBubbleSort = 0;
@@ -111,7 +115,7 @@ int main()
     if (!arrayForBubbleSort)
     {
         printf("Error: no memory allocated");
-        return 0;
+        return MEMORY_ERROR;
     }
     double startTickForBubbleSort = clock();
     bubbleSort(arrayForBubbleSort, ARRAY_LENGTH);
@@ -124,11 +128,12 @@ int main()
     if (!arrayForCountSort)
     {
         printf("Error: no memory allocated");
-        return 0;
+        return MEMORY_ERROR;
     }
     double startTickForCountSort = clock();
     countSort(arrayForCountSort, ARRAY_LENGTH);
     double finishTickForCountSort = clock();
     printf("Count sort running time on an array of 100,000 elements: %.3lf seconds", (finishTickForCountSort - startTickForCountSort) / CLOCKS_PER_SEC);
     free(arrayForCountSort);
+    return END_OF_PROGRAM;
 }
