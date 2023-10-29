@@ -1,125 +1,153 @@
 ﻿#include <stdio.h>
 #include <time.h>
+#include <stdbool.h>
 
 #define LIMITATION_FOR_ARRAY 100
-#define NUMBER_RIGHT_TESTS 3
 #define LIMITATION_TEST_ARRAY 10
 #define RANDOM_RANGE 200
+#define DIFFERENCE_FOR_SORTING 10
+#define END_OF_SORTING 1
+#define ERROR_TESTS 0
 
-int qsorting(int array[], int firstLimitation, int secondLimitation)
+static int insertionSort(int* const array, const int length)
+{
+    for (size_t i = 1; i < length; ++i)
+    {
+        int variables = i;
+        while (i > 0)
+        {
+            if (array[i] < array[i - 1])
+            {
+                int swapSymbols = array[i];
+                array[i] = array[i - 1];
+                array[i - 1] = swapSymbols;
+            }
+            --i;
+        }
+        i = variables;
+    }
+}
+
+static int qsorting(int* const array, const size_t firstLimitation, const size_t secondLimitation)
 {
     if (firstLimitation > secondLimitation)
     {
-        return;
+        return END_OF_SORTING;
     }
-    if (secondLimitation - firstLimitation < 10)
+    if (secondLimitation - firstLimitation < DIFFERENCE_FOR_SORTING)
     {
         insertionSort(array, secondLimitation - firstLimitation);
     }
-    int largeNumberCounter = firstLimitation; 
-    int lowNumberCounter = secondLimitation;
-    int elementForСomparison = array[(secondLimitation + firstLimitation) / 2];
-    while (largeNumberCounter <= lowNumberCounter)
+    size_t leftIndex = firstLimitation;
+    size_t rightIndex = secondLimitation;
+    int elementСomparison = array[(secondLimitation + firstLimitation) / 2];
+    while (leftIndex <= rightIndex)
     {
-        while (array[largeNumberCounter] < elementForСomparison)
+        while (array[leftIndex] < elementСomparison)
         {
-            ++largeNumberCounter;
+            ++leftIndex;
         }
-        while (array[lowNumberCounter] > elementForСomparison)
+        while (array[rightIndex] > elementСomparison)
         {
-            --lowNumberCounter;
+            --rightIndex;
         }
-        if (largeNumberCounter <= lowNumberCounter)
+        if (leftIndex <= rightIndex)
         {
-            int swapVariablesCounter = array[largeNumberCounter];
-            array[largeNumberCounter] = array[lowNumberCounter];
-            array[lowNumberCounter] = swapVariablesCounter;
-            --lowNumberCounter;
-            ++largeNumberCounter;
+            int swapVariablesCounter = array[leftIndex];
+            array[leftIndex] = array[rightIndex];
+            array[rightIndex] = swapVariablesCounter;
+            --rightIndex;
+            ++leftIndex;
         }
     }
-    qsorting(array, firstLimitation, lowNumberCounter);
-    qsorting(array, largeNumberCounter, secondLimitation);
+    qsorting(array, firstLimitation, rightIndex);
+    qsorting(array, leftIndex, secondLimitation);
 }
 
-int insertionSort(int array[], int length)
-{
-    for (int numberSymbol = 1; numberSymbol < length; ++numberSymbol)
-    {
-        int variables = numberSymbol;
-        while (numberSymbol > 0)
-        {
-            if (array[numberSymbol] < array[numberSymbol - 1])
-            {
-                int swapSymbols = array[numberSymbol];
-                array[numberSymbol] = array[numberSymbol - 1];
-                array[numberSymbol - 1] = swapSymbols;
-            }
-            --numberSymbol;
-        }
-        numberSymbol = variables;
-    }
-
-}
-
-int test()
-{
-    int testArray1[LIMITATION_TEST_ARRAY] = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
-    qsorting(testArray1, 0, LIMITATION_TEST_ARRAY - 1);
-    int resultTest = 0;
-    resultTest = checkSort(testArray1, LIMITATION_TEST_ARRAY - 1);
-    int testArray2[LIMITATION_TEST_ARRAY] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
-    qsorting(testArray2, 0, LIMITATION_TEST_ARRAY - 1) + resultTest;
-    resultTest = checkSort(testArray2, LIMITATION_TEST_ARRAY - 1) + resultTest;
-    int testArray3[LIMITATION_TEST_ARRAY] = { 4, 65, 32, 1, 63, 756, 23, 5, 12, 34 };
-    qsorting(testArray3, 0, LIMITATION_TEST_ARRAY - 1);
-    resultTest = checkSort(testArray3, LIMITATION_TEST_ARRAY - 1) + resultTest;
-    return resultTest;
-}
-
-int checkSort(int array[], int length)
+static bool checkSort(int* const array, const int length)
 {
     int resultCounter = 0;
-    for (int counter = 0; counter < length - 1; ++counter)
+    for (size_t i = 0; i < length; ++i)
     {
-        if (array[counter] <= array[counter + 1])
+        if (array[i] <= array[i + 1])
         {
             ++resultCounter;
         }
     }
-if (resultCounter == length - 1)
-{
-    return 1;
-}
-return 0;
+    if (resultCounter == length - 1)
+    {
+        return true;
+    }
+    return false;
 }
 
-int randomiser(int array[], int length)
+static void printErrorTest(const int numberTest)
+{
+    printf("Error test number %d", numberTest);
+}
+
+static bool test(void)
+{
+    int testArray1[LIMITATION_TEST_ARRAY] = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
+    qsorting(testArray1, 0, LIMITATION_TEST_ARRAY - 1);
+    bool resultTest1 = 0;
+    if (!checkSort(testArray1, LIMITATION_TEST_ARRAY))
+    {
+        printErrorTest(1);
+        return false;
+    }
+
+    int testArray2[LIMITATION_TEST_ARRAY] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+    qsorting(testArray2, 0, LIMITATION_TEST_ARRAY - 1);
+    bool resultTest2 = 0;
+    if (!checkSort(testArray2, LIMITATION_TEST_ARRAY))
+    {
+        printErrorTest(2);
+        return false;
+    }
+
+    int testArray3[LIMITATION_TEST_ARRAY] = { 4, 65, 32, 1, 63, 756, 23, 5, 12, 34 };
+    qsorting(testArray3, 0, LIMITATION_TEST_ARRAY - 1);
+    bool resultTest3 = 0;
+    if (!checkSort(testArray3, LIMITATION_TEST_ARRAY))
+    {
+        printErrorTest(3);
+        return false;
+    }
+    return true;
+}
+
+static int randomiser(int* const array, int length)
 {
     srand(time(NULL));
-    for (int counter = 0; counter < length; ++counter)
+    for (size_t i = 0; i < length; ++i)
     {
-        array[counter] = rand() % RANDOM_RANGE;
-        printf("%d ", array[counter]);
+        array[i] = rand() % RANDOM_RANGE;
     }
     return array;
 }
 
-int main()
+static void printArray(int* const array)
 {
-    if (test() != NUMBER_RIGHT_TESTS)
+    for (size_t i = 0; i < LIMITATION_FOR_ARRAY; ++i)
+    {
+        printf("%d ", array[i]);
+    }
+}
+
+void main(void)
+{
+    if (!test())
     {
         printf("Error test");
-        return 0;
+        return ERROR_TESTS;
     }
     int array[LIMITATION_FOR_ARRAY] = { 0 };
     printf("Source array: ");
     randomiser(array, LIMITATION_FOR_ARRAY);
+    printArray(array);
     qsorting(array, 0, LIMITATION_FOR_ARRAY - 1);
     printf("\n\nSorted array: ");
-    for (int i = 0; i < 100; ++i)
-    {
-        printf("%d ", array[i]);
-    }
+    printArray(array);
 }
 
