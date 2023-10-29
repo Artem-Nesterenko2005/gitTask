@@ -133,6 +133,7 @@ static void printArray(int* const array)
     {
         printf("%d ", array[i]);
     }
+    printf("\n");
 }
 
 void main(void)
@@ -147,7 +148,7 @@ void main(void)
     randomiser(array, LIMITATION_FOR_ARRAY);
     printArray(array);
     qsorting(array, 0, LIMITATION_FOR_ARRAY - 1);
-    printf("\n\nSorted array: ");
+    printf("Sorted array: ");
     printArray(array);
 }
 
