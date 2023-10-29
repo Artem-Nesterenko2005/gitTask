@@ -101,4 +101,4 @@ void main(void)
     printf("\nConverted array ");
     printArray(array, LENGTH_ARRAY);
 }
-LF
+
