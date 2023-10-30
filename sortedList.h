@@ -17,3 +17,4 @@ static Node* listOperations(int numberOperation, Node* list);
 
 //Test for push and pop function
 static bool test(void);
+
