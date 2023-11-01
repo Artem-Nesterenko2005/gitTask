@@ -32,3 +32,4 @@ const unsigned int testList(void)
     }
     return RIGHT_TESTS;
 }
+

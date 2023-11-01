@@ -85,3 +85,4 @@ const unsigned int symbolFromList(Node* list, int data)
     }
     return list->data;
 }
+

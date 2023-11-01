@@ -17,3 +17,4 @@ const unsigned int nextNodeData(Node* const list);
 
 //returns data by cell number
 const unsigned int symbolFromList(Node* list, int data);
+

@@ -79,3 +79,4 @@ int main(void)
     printf("The warrior numbered %d will be last", position);
     return END_PROGRAM;
 }
+
