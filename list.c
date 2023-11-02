@@ -2,17 +2,18 @@
 
 #include "list.h"
 
-#define ERROR_CODE -1
+#define ERROR_LIST -1
 
 typedef struct Node
 {
-    int data;
+    unsigned int data;
     struct Node* next;
 }Node;
 
-const Node* push(Node* list, const int data)
+const Node* push(Node* list, const unsigned int data)
 {
-    Node* newElement = malloc(sizeof(Node));
+    Node* newElement = NULL;
+    newElement = malloc(sizeof(Node));
     if (newElement == NULL)
     {
         return list;
@@ -23,7 +24,7 @@ const Node* push(Node* list, const int data)
         newElement->next = newElement;
         return newElement;
     }
-    Node* head = list;
+    const Node* head = list;
     while (list->next->data != head->data)
     {
         list = list->next;
@@ -33,7 +34,7 @@ const Node* push(Node* list, const int data)
     return head;
 }
 
-const Node* pop(Node* list, const int data)
+const Node* pop(Node* list, const unsigned int data)
 {
     if (list == NULL)
     {
@@ -64,7 +65,7 @@ const unsigned int top(Node* const list)
     {
         return list->data;
     }
-    return ERROR_CODE;
+    return ERROR_LIST;
 }
 
 const unsigned int nextNodeData(Node* list)
@@ -73,16 +74,12 @@ const unsigned int nextNodeData(Node* list)
     {
         return list->next->data;
     }
-    return ERROR_CODE;
+    return ERROR_LIST;
 }
 
-const unsigned int symbolFromList(Node* list, int data)
+const Node* nextNode(Node* list)
 {
-    while (data > 1)
-    {
-        list = list->next;
-        --data;
-    }
-    return list->data;
+    list = list->next;
+    return list;
 }
 

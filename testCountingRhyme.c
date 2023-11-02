@@ -11,10 +11,11 @@ bool listFillingTest(Node* list)
 {
     for (size_t i = 1; i < 6; ++i)
     {
-        if (i != symbolFromList(list, i))
+        if (i != top(list))
         {
             return false;
         }
+        list = nextNode(list);
     }
     return true;
 }

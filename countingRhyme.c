@@ -12,7 +12,7 @@
 
 const Node* listFilling(Node* list, const unsigned int numberOfWarriors)
 {
-    for (size_t i = 1; i <= numberOfWarriors; ++i)
+    for (unsigned int i = 1; i <= numberOfWarriors; ++i)
     {
         list = push(list, i);
     }
@@ -24,19 +24,16 @@ const unsigned int survivorStartingPosition(const unsigned int numberKilled, con
     Node* list = NULL;
     list = listFilling(list, numberOfWarriors);
     unsigned int position = 1;
-    unsigned int counterSymbol = 1;
-    while (top(list) != nextNodeData(list) && top(list) != -1)
+    while (top(list) != nextNodeData(list))
     {
         if (position % numberKilled == 0)
         {
-            const unsigned int deletedSymbol = symbolFromList(list, counterSymbol);
-            list = pop(list, deletedSymbol);
+            list = pop(list, top(list));
             position = 1;
-            counterSymbol = 1;
             continue;
         }
         ++position;
-        ++counterSymbol;
+        list = nextNode(list);
     }
     return top(list);
 }

@@ -26,7 +26,7 @@ const unsigned int testList(void)
         return 3;
     }
     testList = push(testList, 10);
-    if (symbolFromList(testList, 3) != 10)
+    if (top(nextNode(nextNode(testList))) != 10)
     {
         return 4;
     }

@@ -1,13 +1,15 @@
 #pragma once
 
+#define ERROR_LIST -1
+
 //struct for list
 typedef struct Node Node;
 
-//function to add data to a list
-const Node* push(Node* list, const int data);
+//function to add data to a list, return list if memory error
+const Node* push(Node* list, const unsigned int data);
 
-//function to remove data from a list
-const Node* pop(Node* list, const int data);
+//function to remove data from a list, if list is empty, return list
+const Node* pop(Node* list, const unsigned int data);
 
 //returns data from the top of the list
 const unsigned int top(Node* const list);
@@ -15,6 +17,6 @@ const unsigned int top(Node* const list);
 //returns data from the node after the top of the list
 const unsigned int nextNodeData(Node* const list);
 
-//returns data by cell number
-const unsigned int symbolFromList(Node* list, int data);
+//return next node of list
+const Node* nextNode(Node* list);
 
