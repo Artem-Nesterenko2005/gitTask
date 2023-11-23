@@ -6,7 +6,6 @@
 #define END 0 
 #define ERROR_TEST -1
 
-
 static double iteration(double number, int degree)
 {
     if (degree >= 0)
@@ -76,3 +75,4 @@ int main(void)
     printf("Result of a program running in logarithmic time %lf", logNResult);
     return END;
 }
+
