@@ -11,11 +11,11 @@ static double iteration(double number, int degree)
     degree = abs(degree);
     
     double result = 1;
-    for (degree; degree > 0; --degree)
+    for (;degree > 0; --degree)
     {
         result = result * number;
     }
-    return sign && result != 0 ? 1 / result : result;
+    return (sign && result != 0) ? 1 / result : result;
 }
 
 static double exponentiationLog(double number, int degree)
@@ -31,12 +31,14 @@ static double exponentiationLog(double number, int degree)
     if (degree % 2 == 0)
     {
         double halfPower = exponentiationLog(number, degree / 2);
-        return sign ? 1 / (halfPower * halfPower) : halfPower * halfPower;
+        halfPower = halfPower * halfPower;
+        return sign ? 1 / halfPower : halfPower;
     }
 
     else
     {
-        return sign ? 1 / (exponentiationLog(number, degree - 1) * number) : (exponentiationLog(number, degree - 1) * number);
+        double intermediateProduct = (exponentiationLog(number, degree - 1) * number);
+        return sign ? 1 / intermediateProduct : intermediateProduct;
     }
 }
 
