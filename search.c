@@ -10,7 +10,7 @@
 #define ERROR_MEMORY -2
 #define LENGTH_MAIN 10
 
-static void randomizer(int* const mainArray, const unsigned int length)
+static void randomizer(int* const mainArray, const size_t length)
 {
     for (size_t i = 0; i < length; ++i)
     {
@@ -18,16 +18,16 @@ static void randomizer(int* const mainArray, const unsigned int length)
     }
 }
 
-static int quickSort(int* const array, int firstLimitation, int secondLimitation)
+static int quickSort(int* const array, size_t firstLimitation, size_t secondLimitation)
 {
     if (firstLimitation > secondLimitation)
     {
         return;
     }
 
-    int largeIndex = firstLimitation;
-    int lowIndex = secondLimitation;
-    unsigned int elementForСomparison = array[(secondLimitation + firstLimitation) / 2];
+    size_t largeIndex = firstLimitation;
+    size_t lowIndex = secondLimitation;
+    size_t elementForСomparison = array[(secondLimitation + firstLimitation) / 2];
 
     while (largeIndex <= lowIndex)
     {
@@ -53,7 +53,7 @@ static int quickSort(int* const array, int firstLimitation, int secondLimitation
     quickSort(array, largeIndex, secondLimitation);
 }
 
-static bool binSearch(int* const mainArray, size_t number, const int lengthMain)
+static bool binSearch(int* const mainArray, size_t number, const size_t lengthMain)
 {
     size_t k = lengthMain / 2;
     while (mainArray[k] != number)
