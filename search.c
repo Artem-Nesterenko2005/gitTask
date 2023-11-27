@@ -9,6 +9,7 @@
 #define ERROR_TEST -1
 #define ERROR_MEMORY -2
 #define LENGTH_MAIN 10
+#define START_ARRAY 0
 
 static void randomizer(int* const mainArray, const size_t length)
 {
@@ -18,7 +19,7 @@ static void randomizer(int* const mainArray, const size_t length)
     }
 }
 
-static int quickSort(int* const array, size_t firstLimitation, size_t secondLimitation)
+static int quickSort(int* const array, const size_t firstLimitation, const size_t secondLimitation)
 {
     if (firstLimitation > secondLimitation)
     {
@@ -53,27 +54,44 @@ static int quickSort(int* const array, size_t firstLimitation, size_t secondLimi
     quickSort(array, largeIndex, secondLimitation);
 }
 
-static bool binSearch(int* const mainArray, size_t number, const size_t lengthMain)
+static bool binSearch(int* const mainArray, size_t number, const size_t lengthMain, const size_t start)
 {
-    size_t k = lengthMain / 2;
-    while (mainArray[k] != number)
+    size_t k = (lengthMain + start) / 2;
+    if (mainArray[k] == number)
     {
-        if (mainArray[k - 1] < number && mainArray[k] > number || k == 0 || k == lengthMain)
+        return true;
+    }
+    
+    if (k == start)
+    {
+        return false;
+    }
+    mainArray[k] < number ? binSearch(mainArray, number, lengthMain, k) : binSearch(mainArray, number, k, start);
+}
+
+static bool checkSort(int* const array, const size_t length)
+{
+    for (size_t i = 0; i < length - 1; ++i)
+    {
+        if (array[i] > array[i + 1])
         {
             return false;
         }
-        k = (mainArray[k] > number) && (k != 0) ? --k : ++k;
     }
     return true;
 }
 
-
 static bool test(void)
 {
-    int testMainArray1[LENGTH_MAIN] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+    int testMainArray1[LENGTH_MAIN] = { 8, 2, 10, 4, 5, 1, 3, 6, 7, 9 };
 
     quickSort(testMainArray1, 0, LENGTH_MAIN - 1);
-    if (!binSearch(testMainArray1, 1, LENGTH_MAIN) || binSearch(testMainArray1, 11, LENGTH_MAIN))
+    if (!checkSort(testMainArray1, LENGTH_MAIN))
+    {
+        printf("Error test number 1\n");
+        return false;
+    }
+    if (!binSearch(testMainArray1, 1, LENGTH_MAIN, START_ARRAY) || binSearch(testMainArray1, 11, LENGTH_MAIN, START_ARRAY))
     {
         printf("Error test number 1\n");
         return false;
@@ -82,16 +100,26 @@ static bool test(void)
     int testMainArray2[LENGTH_MAIN] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
 
     quickSort(testMainArray2, 0, LENGTH_MAIN - 1);
-    if (binSearch(testMainArray2, 11, LENGTH_MAIN) || binSearch(testMainArray2, 12, LENGTH_MAIN))
+    if (!checkSort(testMainArray2, LENGTH_MAIN))
+    {
+        printf("Error test number 2\n");
+        return false;
+    }
+    if (binSearch(testMainArray2, 11, LENGTH_MAIN, START_ARRAY) || binSearch(testMainArray2, 12, LENGTH_MAIN, START_ARRAY))
     {
         printf("Error test number 2\n");
         return false;
     }
 
-    int testMainArray3[LENGTH_MAIN] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+    int testMainArray3[LENGTH_MAIN] = { 9, 10, 8, 2, 4, 1, 3, 6, 7, 5 };
 
     quickSort(testMainArray3, 0, LENGTH_MAIN - 1);
-    if (!binSearch(testMainArray3, 1, LENGTH_MAIN) || !binSearch(testMainArray3, 2, LENGTH_MAIN))
+    if (!checkSort(testMainArray3, LENGTH_MAIN))
+    {
+        printf("Error test number 3\n");
+        return false;
+    }
+    if (!binSearch(testMainArray3, 1, LENGTH_MAIN, START_ARRAY) || !binSearch(testMainArray3, 2, LENGTH_MAIN, START_ARRAY))
     {
         printf("Error test number 3\n");
         return false;
@@ -100,7 +128,7 @@ static bool test(void)
     return true;
 }
 
-void printArray(int* const array, size_t length)
+static void printArray(int* const array, size_t length)
 {
     for (size_t i = 0; i < length; ++i)
     {
@@ -137,6 +165,7 @@ int main(void)
     if (checkNumbers == NULL)
     {
         printf("Error: no memory allocated");
+        free(mainArray);
         return ERROR_MEMORY;
     }
 
@@ -153,7 +182,7 @@ int main(void)
 
     for (size_t i = 0; i < number; ++i)
     {
-        if (binSearch(mainArray, checkNumbers[i], length))
+        if (binSearch(mainArray, checkNumbers[i], length, START_ARRAY))
         {
             printf("The number %d is included in the main array \n\n", checkNumbers[i]);
             continue;
