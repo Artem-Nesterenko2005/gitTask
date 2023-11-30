@@ -9,6 +9,7 @@
 #include "test.h"
 
 #define LIMITATION_OF_STRING 1000
+#define OK_CODE 2
 
 enum errorCode
 {
@@ -41,4 +42,5 @@ int main(void)
     }
 
     printf("%Iu", postfixCalculator(string, lengthString - 1));
+    return OK_CODE;
 }
