@@ -1,21 +1,37 @@
 ﻿#include <stdlib.h>
 #include <stdbool.h>
 
-#include "../stack/stack.h"
+#include "../postfixCalculator/stack.h"
 #include "testStack.h"
 
 static bool testPushAndTopStack(Stack* stack)
 {
     stack = push(stack, 1);
-    return top(stack) == 1;
+    const bool result = !isEmpty(stack) && top(stack) == 1;
+    free(stack);
+    return result;
+
+    return false;
 }
 
 static bool testPopAndTopStack(Stack* stack)
 {
     stack = push(stack, 1);
+    if (stack == NULL)
+    {
+        return false;
+    }
+
     stack = push(stack, 2);
+    if (stack == NULL)
+    {
+        return false;
+    }
+
     stack = pop(stack);
-    return top(stack) == 1;
+    const bool result = top(stack) == 1;
+    free(stack);
+    return result;
 }
 
 static bool testIsEmpty(Stack* stack)
@@ -28,22 +44,18 @@ bool testStack(void)
     Stack* stack = NULL;
     if (!testPushAndTopStack(stack))
     {
-        free(stack);
         return false;
     }
 
     if (!testPopAndTopStack(stack))
     {
-        free(stack);
         return false;
     }
 
     if (!testIsEmpty(stack))
     {
-        free(stack);
         return false;
     }
 
-    free(stack);
     return true;
 }

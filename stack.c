@@ -4,39 +4,49 @@
 
 #include "stack.h"
 
+#define ERROR_MEMORY NULL
+
 typedef struct Stack
 {
-    size_t data;
+    int data;
     struct Stack* next;
-}Stack;
+} Stack;
 
-Stack* push(Stack* top, size_t const data)
+Stack* push(const Stack* const top, int const data)
 {
     Stack* pointer = malloc(sizeof(Stack));
     if (pointer == NULL)
     {
-        return top;
+        return ERROR_MEMORY;
     }
     pointer->data = data;
     pointer->next = top;
     return pointer;
 }
 
-bool isEmpty(Stack* top)
+bool isEmpty(const Stack* const top)
 {
     return top == NULL;
 }
 
-Stack* pop(Stack* top)
+Stack* pop(const Stack* top)
 {
     if (isEmpty(top))
     {
         return top;
     }
-    return top->next;
+    Stack* pointer = top;
+    top = top->next;
+    free(pointer);
+    return top;
 }
 
-int top(Stack* stack)
+int top(const Stack* const stack)
 {
     return stack->data;
+}
+
+Stack* nextNode(const Stack* const stack)
+{
+    return stack->next;
 }

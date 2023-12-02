@@ -3,18 +3,20 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-#include "../stack/stack.h"
-#include "../testStack/testStack.h"
+#include "stack.h"
+#include "testStack.h"
 #include "postfixCalculator.h"
 #include "test.h"
 
-#define LIMITATION_OF_STRING 1000
-#define OK_CODE 2
+#define ERROR_VALIDATION -999
+#define STACK_ERROR -998
 
-enum errorCode
+enum exitCode
 {
     ERROR_TEST,
-    ERROR_STRING
+    ERROR_CALCULATOR,
+    ERROR_STACK,
+    OK_CODE
 };
 
 int main(void)
@@ -31,16 +33,22 @@ int main(void)
         return ERROR_TEST;
     }
 
-    printf("Enter the string (the first 1000 symbols are counted) ");
-    char string[LIMITATION_OF_STRING] = { '\0' };
-    fgets(string, LIMITATION_OF_STRING, stdin);
+    printf("Enter the string ");
+    char* const string = createString();
     size_t const lengthString = strlen(string);
-    if (stringValidation(string, lengthString - 1) == false)
+
+    int const result = postfixCalculator(string, lengthString);
+    if (result == ERROR_VALIDATION)
     {
         printf("Unknown symbols in string or the number of operations and symbols is incorrect");
-        return ERROR_STRING;
+        return ERROR_CALCULATOR;
     }
 
-    printf("%Iu", postfixCalculator(string, lengthString - 1));
+    if (result == STACK_ERROR)
+    {
+        printf("Error stack");
+        return ERROR_STACK;
+    }
+    printf("Result: %d", result);
     return OK_CODE;
 }

@@ -1,7 +1,7 @@
 #pragma once
 
-//postfix calculator 
-size_t postfixCalculator(char* const string, const size_t length);
+//create a row based on user data
+char* createString(void);
 
-//check string to validation
-bool stringValidation(char* const string, const size_t lengthString);
+//postfix calculator 
+int postfixCalculator(const char* const string, const size_t length);

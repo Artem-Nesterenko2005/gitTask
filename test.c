@@ -6,17 +6,13 @@
 #include "test.h"
 #include "postfixCalculator.h"
 
-#define LIMITATION_OF_STRING 1000
+#define ERROR_VALIDATION -999
 
-static bool caseTest(const char* string, size_t const length, size_t const rightResult)
+static bool caseTest(const char* const string, size_t const numberTest, size_t const rightResult)
 {
-    if (!stringValidation(string, length))
+    if (postfixCalculator(string, strlen(string)) != rightResult)
     {
-        return false;
-    }
-
-    if (postfixCalculator(string, length) != rightResult)
-    {
+        printf("Error test number %d\n", numberTest);
         return false;
     }
 
@@ -25,27 +21,21 @@ static bool caseTest(const char* string, size_t const length, size_t const right
 
 bool test(void)
 {
-    const char testString1[LIMITATION_OF_STRING] = { "11" };
-    size_t const lengthTestString1 = strlen(testString1);
-    if (caseTest(testString1, lengthTestString1, 0))
+    const char testString1[3] = { "11" };
+    if (!caseTest(testString1, 1, ERROR_VALIDATION))
     {
-        printf("Error test number 1");
         return false;
     }
 
-    const char testString2[LIMITATION_OF_STRING] = { "9 6 -" };
-    size_t const lengthTestString2 = strlen(testString2);
-    if (!caseTest(testString2, lengthTestString2, 3))
+    const char testString2[6] = { "9 6 -" };
+    if (!caseTest(testString2, 2, 3))
     {
-        printf("Error test number 2");
         return false;
     }
 
-    const char testString3[LIMITATION_OF_STRING] = { "2 3 + 4 * 2 /" };
-    size_t const lengthTestString3 = strlen(testString3);
-    if (!caseTest(testString3, lengthTestString3, 10))
+    const char testString3[14] = { "2 3 + 4 * 2 /" };
+    if (!caseTest(testString3, 3, 10))
     {
-        printf("Error test number 3");
         return false;
     }
 
