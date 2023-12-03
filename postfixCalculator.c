@@ -30,12 +30,14 @@ char* readString(int* const errorCode)
         if (length >= capacity)
         {
             capacity *= 2;
-            string = (char*)realloc(string, capacity * sizeof(char));
-            if (string == NULL)
+            char* tmp = (char*)realloc(string, capacity * sizeof(char));
+            if (tmp == NULL)
             {
+                free(string);
                 *errorCode = ERROR_MEMORY;
                 return NULL;
             }
+            string = tmp;
         }
 
         symbol = getchar();
@@ -80,7 +82,8 @@ int postfixCalculator(const char* const string, const size_t length, int* const 
             stack = push(stack, string[i] - ENCODING_CONVERSION, errorCode);
             if (*errorCode == ERROR_MEMORY)
             {
-                return 0;
+                clearStack(stack);
+                return NULL_EXPRESSION;
             }
             continue;
         }
@@ -89,16 +92,18 @@ int postfixCalculator(const char* const string, const size_t length, int* const 
         {
             if (isEmpty(stack))
             {
+                clearStack(stack);
                 *errorCode = ERROR_VALIDATION;
-                return 0;
+                return NULL_EXPRESSION;
             }
             number1 = top(stack);
             stack = pop(stack);
 
             if (isEmpty(stack))
             {
+                clearStack(stack);
                 *errorCode = ERROR_VALIDATION;
-                return 0;
+                return NULL_EXPRESSION;
             }
             number2 = top(stack);
             stack = pop(stack);
@@ -107,14 +112,14 @@ int postfixCalculator(const char* const string, const size_t length, int* const 
             {
                 clearStack(stack);
                 *errorCode = ERROR_VALIDATION;
-                return 0;
+                return NULL_EXPRESSION;
             }
 
             stack = push(stack, transactionProcessing(string[i], number1, number2), errorCode);
             if (*errorCode == ERROR_MEMORY)
             {
                 clearStack(stack);
-                return 0;
+                return NULL_EXPRESSION;
             }
             continue;
         }
@@ -129,5 +134,5 @@ int postfixCalculator(const char* const string, const size_t length, int* const 
 
     clearStack(stack);
     *errorCode = ERROR_STACK;
-    return 0;
+    return NULL_EXPRESSION;
 }

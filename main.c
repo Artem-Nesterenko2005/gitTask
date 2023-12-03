@@ -24,7 +24,7 @@ int main(void)
     }
 
     printf("Enter the string ");
-    const int* const errorCode = 0;
+    const int* const errorCode = DEFAULT;
     char* const string = readString(&errorCode);
     if (errorCode == ERROR_MEMORY)
     {

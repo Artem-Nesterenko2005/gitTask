@@ -5,10 +5,11 @@
 
 #include "test.h"
 #include "postfixCalculator.h"
+#include "errorCodes.h"
 
 static bool caseTest(const char* const string, size_t const numberTest, size_t const rightResult, int const rightCode)
 {
-    int* const errorCode = 0;
+    int* const errorCode = DEFAULT;
     if ((postfixCalculator(string, strlen(string), &errorCode) != rightResult) || (errorCode != rightCode))
     {
         printf("Error test number %Iu\n", numberTest);
@@ -26,5 +27,5 @@ bool test(void)
 
     const char testString3[14] = { "2 3 + 4 * 2 /" };
 
-    return caseTest(testString1, 1, 0, 3) && caseTest(testString2, 2, 3, 0) && caseTest(testString3, 3, 10, 0);
+    return caseTest(testString1, 1, 0, ERROR_STACK) && caseTest(testString2, 2, 3, DEFAULT) && caseTest(testString3, 3, 10, DEFAULT);
 }

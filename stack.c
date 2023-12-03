@@ -37,7 +37,7 @@ Stack* pop(const Stack* top)
     }
     Stack* pointer = top;
     top = top->next;
-    free(pointer);
+    free(&pointer->data);
     return top;
 }
 
@@ -54,10 +54,10 @@ Stack* nextNode(const Stack* const stack)
 void clearStack(const Stack* stack)
 {
     Stack* pointerNext = stack;
-    while (stack != NULL)
+    while (!isEmpty(stack))
     {
         stack = stack->next;
-        free(&pointerNext->data);
+        pointerNext = pop(pointerNext);
         pointerNext = stack;
     }
 }
