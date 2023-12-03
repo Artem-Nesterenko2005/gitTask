@@ -3,59 +3,47 @@
 
 #include "../postfixCalculator/stack.h"
 #include "testStack.h"
+#include "errorCodes.h"
 
-static bool testPushAndTopStack(Stack* stack)
+static bool testPushAndTopStack(void)
 {
-    stack = push(stack, 1);
-    const bool result = !isEmpty(stack) && top(stack) == 1;
-    free(stack);
+    int* const errorCode = 0;
+    Stack* stack = NULL;
+    stack = push(stack, 1, errorCode);
+    const bool result = !isEmpty(stack) && top(stack) == 1 && errorCode == 0;
+    clearStack(stack);
     return result;
-
-    return false;
 }
 
-static bool testPopAndTopStack(Stack* stack)
+static bool testPopAndTopStack(void)
 {
-    stack = push(stack, 1);
-    if (stack == NULL)
+    int* const errorCode = 0;
+    Stack* stack = NULL;
+    stack = push(stack, 1, errorCode);
+    if (stack == NULL || errorCode != 0)
     {
         return false;
     }
 
-    stack = push(stack, 2);
-    if (stack == NULL)
+    stack = push(stack, 2, errorCode);
+    if (stack == NULL || errorCode != 0)
     {
         return false;
     }
 
     stack = pop(stack);
-    const bool result = top(stack) == 1;
-    free(stack);
+    const bool result = top(stack) == 1 && errorCode == 0;
+    clearStack(stack);
     return result;
 }
 
-static bool testIsEmpty(Stack* stack)
+static bool testIsEmpty(void)
 {
+    Stack* stack = NULL;
     return isEmpty(stack);
 }
 
 bool testStack(void)
 {
-    Stack* stack = NULL;
-    if (!testPushAndTopStack(stack))
-    {
-        return false;
-    }
-
-    if (!testPopAndTopStack(stack))
-    {
-        return false;
-    }
-
-    if (!testIsEmpty(stack))
-    {
-        return false;
-    }
-
-    return true;
+    return testPushAndTopStack() && testPopAndTopStack() && testIsEmpty();
 }

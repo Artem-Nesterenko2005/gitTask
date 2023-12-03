@@ -3,8 +3,7 @@
 #include <stdlib.h>
 
 #include "stack.h"
-
-#define ERROR_MEMORY NULL
+#include "errorCodes.h"
 
 typedef struct Stack
 {
@@ -12,12 +11,13 @@ typedef struct Stack
     struct Stack* next;
 } Stack;
 
-Stack* push(const Stack* const top, int const data)
+Stack* push(const Stack* top, int const data, int* const errorCode)
 {
     Stack* pointer = malloc(sizeof(Stack));
     if (pointer == NULL)
     {
-        return ERROR_MEMORY;
+        *errorCode = ERROR_MEMORY;
+        return top;
     }
     pointer->data = data;
     pointer->next = top;
@@ -49,4 +49,15 @@ int top(const Stack* const stack)
 Stack* nextNode(const Stack* const stack)
 {
     return stack->next;
+}
+
+void clearStack(const Stack* stack)
+{
+    Stack* pointerNext = stack;
+    while (stack != NULL)
+    {
+        stack = stack->next;
+        free(&pointerNext->data);
+        pointerNext = stack;
+    }
 }

@@ -7,21 +7,20 @@
 
 #include "stack.h"
 #include "postfixCalculator.h"
+#include "errorCodes.h"
 
 #define ENCODING_CONVERSION 48
 
-enum errorCode
-{
-    STACK_ERROR = -998,
-    ERROR_VALIDATION = -999
-};
-
-char* createString(void)
+char* readString(int* const errorCode)
 {
     size_t length = 0;
     size_t capacity = 1;
     char* string = (char*)malloc(sizeof(char));
-
+    if (string == NULL)
+    {
+        *errorCode = ERROR_MEMORY;
+        return NULL;
+    }
     char symbol = getchar();
 
     while (symbol != '\n')
@@ -32,6 +31,11 @@ char* createString(void)
         {
             capacity *= 2;
             string = (char*)realloc(string, capacity * sizeof(char));
+            if (string == NULL)
+            {
+                *errorCode = ERROR_MEMORY;
+                return NULL;
+            }
         }
 
         symbol = getchar();
@@ -59,46 +63,13 @@ static size_t transactionProcessing(char const symbol, const size_t number1, con
     }
 }
 
-static bool stringValidation(const char* const string, const size_t lengthString)
+static bool isOperation(char const symbol)
 {
-    size_t numberOfDigits = 0;
-    size_t numberOfOperations = 0;
-    for (size_t i = 0; i < lengthString; ++i)
-    {
-
-        if (isdigit(string[i]))
-        {
-            ++numberOfDigits;
-        }
-
-        else if (string[i] == '-' || string[i] == '+' || string[i] == '/' || string[i] == '*')
-        {
-            ++numberOfOperations;
-        }
-
-        else if (string[i] != ' ')
-        {
-            return false;
-        }
-
-        if (numberOfOperations >= numberOfDigits)
-        {
-            return false;
-        }
-    }
-    if (numberOfDigits - numberOfOperations == 1)
-    {
-        return true;
-    }
-    return false;
+    return symbol == '*' || symbol == '/' || symbol == '-' || symbol == '+';
 }
 
-int postfixCalculator(const char* const string, const size_t length)
+int postfixCalculator(const char* const string, const size_t length, int* const errorCode)
 {
-    if (!stringValidation(string, length))
-    {
-        return ERROR_VALIDATION;
-    }
     Stack* stack = NULL;
     int number1 = 0;
     int number2 = 0;
@@ -106,42 +77,57 @@ int postfixCalculator(const char* const string, const size_t length)
     {
         if (isdigit(string[i]))
         {
-            stack = push(stack, string[i] - ENCODING_CONVERSION);
-            if (stack == NULL)
+            stack = push(stack, string[i] - ENCODING_CONVERSION, errorCode);
+            if (*errorCode == ERROR_MEMORY)
             {
-                return STACK_ERROR;
+                return 0;
             }
+            continue;
         }
 
-        else if (string[i] != ' ')
+        else if (isOperation(string[i]))
         {
-            if (stack == NULL)
+            if (isEmpty(stack))
             {
-                return STACK_ERROR;
+                *errorCode = ERROR_VALIDATION;
+                return 0;
             }
             number1 = top(stack);
             stack = pop(stack);
 
-            if (stack == NULL)
+            if (isEmpty(stack))
             {
-                return STACK_ERROR;
+                *errorCode = ERROR_VALIDATION;
+                return 0;
             }
             number2 = top(stack);
             stack = pop(stack);
 
-            stack = push(stack, transactionProcessing(string[i], number1, number2));
-            if (stack == NULL)
+            if (!isEmpty(stack))
             {
-                return STACK_ERROR;
+                clearStack(stack);
+                *errorCode = ERROR_VALIDATION;
+                return 0;
             }
+
+            stack = push(stack, transactionProcessing(string[i], number1, number2), errorCode);
+            if (*errorCode == ERROR_MEMORY)
+            {
+                clearStack(stack);
+                return 0;
+            }
+            continue;
         }
     }
 
     if (isEmpty(nextNode(stack)) && !isEmpty(stack))
     {
         int result = top(stack);
-        free(stack);
+        clearStack(stack);
         return result;
     }
-    return STACK_ERROR;
+
+    clearStack(stack);
+    *errorCode = ERROR_STACK;
+    return 0;
 }
