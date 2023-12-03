@@ -9,7 +9,7 @@
 
 static bool caseTest(const char* const string, size_t const numberTest, size_t const rightResult, int const rightCode)
 {
-    int* const errorCode = 0;
+    int* const errorCode = OK_CODE;
     if ((postfixCalculator(string, strlen(string), &errorCode) != rightResult) || (errorCode != rightCode))
     {
         printf("Error test number %Iu\n", numberTest);

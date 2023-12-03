@@ -56,6 +56,6 @@ void clearStack(const Stack* stack)
 {
     while (!isEmpty(stack))
     {
-        stack = pop(&stack->data);
+        stack = pop(stack);
     }
 }
