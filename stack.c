@@ -21,6 +21,7 @@ Stack* push(const Stack* top, int const data, int* const errorCode)
     }
     pointer->data = data;
     pointer->next = top;
+    *errorCode = OK_CODE;
     return pointer;
 }
 
@@ -53,11 +54,8 @@ Stack* nextNode(const Stack* const stack)
 
 void clearStack(const Stack* stack)
 {
-    Stack* pointerNext = stack;
     while (!isEmpty(stack))
     {
-        stack = stack->next;
-        pointerNext = pop(pointerNext);
-        pointerNext = stack;
+        stack = pop(&stack->data);
     }
 }

@@ -9,7 +9,7 @@
 
 static bool caseTest(const char* const string, size_t const numberTest, size_t const rightResult, int const rightCode)
 {
-    int* const errorCode = DEFAULT;
+    int* const errorCode = 0;
     if ((postfixCalculator(string, strlen(string), &errorCode) != rightResult) || (errorCode != rightCode))
     {
         printf("Error test number %Iu\n", numberTest);
@@ -27,5 +27,5 @@ bool test(void)
 
     const char testString3[14] = { "2 3 + 4 * 2 /" };
 
-    return caseTest(testString1, 1, 0, ERROR_STACK) && caseTest(testString2, 2, 3, DEFAULT) && caseTest(testString3, 3, 10, DEFAULT);
+    return caseTest(testString1, 1, 0, ERROR_STACK) && caseTest(testString2, 2, 3, OK_CODE) && caseTest(testString3, 3, 10, OK_CODE);
 }

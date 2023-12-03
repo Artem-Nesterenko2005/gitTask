@@ -129,6 +129,7 @@ int postfixCalculator(const char* const string, const size_t length, int* const 
     {
         int result = top(stack);
         clearStack(stack);
+        *errorCode = OK_CODE;
         return result;
     }
 

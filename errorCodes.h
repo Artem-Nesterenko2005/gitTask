@@ -10,5 +10,4 @@ enum exitCode
     ERROR_STACK,
     ERROR_VALIDATION,
     ERROR_MEMORY,
-    DEFAULT
 };
