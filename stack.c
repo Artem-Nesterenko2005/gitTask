@@ -11,7 +11,7 @@ typedef struct Stack
     struct Stack* next;
 } Stack;
 
-Stack* push(const Stack* top, int const data, int* const errorCode)
+Stack* push(Stack* const top, const int data, int* const errorCode)
 {
     Stack* pointer = malloc(sizeof(Stack));
     if (pointer == NULL)
@@ -30,7 +30,7 @@ bool isEmpty(const Stack* const top)
     return top == NULL;
 }
 
-Stack* pop(const Stack* top)
+Stack* pop(Stack* top)
 {
     if (isEmpty(top))
     {
@@ -52,7 +52,7 @@ Stack* nextNode(const Stack* const stack)
     return stack->next;
 }
 
-void clearStack(const Stack* stack)
+void clearStack(Stack* stack)
 {
     while (!isEmpty(stack))
     {

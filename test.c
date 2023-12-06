@@ -7,49 +7,34 @@
 
 #define LIMITATION_OF_STRING 1000
 
-static bool testCase(const char* const string, size_t const number)
+static bool testCase(const char* const string, const size_t number, const bool rightResult)
 {
     int* const errorCode = OK_CODE;
     const bool result = bracketsBalance(string, strlen(string), &errorCode);
-    return errorCode == OK_CODE && result;
+    if ((errorCode == OK_CODE && result) != rightResult)
+    {
+        printf("Error test number %Iu\n", number);
+        return false;
+    }
+    return true;
 }
 
 bool test(void)
 {
-    char const testString1[LIMITATION_OF_STRING] = { "(((((" };
-    if (testCase(testString1, 1))
-    {
-        printf("Error test number 1\n");
-        return false;
-    }
+    const char const testString1[LIMITATION_OF_STRING] = { "(((((" };
+    const bool result1 = testCase(testString1, 1, false);
 
-    char const testString2[LIMITATION_OF_STRING] = { "({[]})" };
-    if (testCase(testString1, 2))
-    {
-        printf("Error test number 2\n");
-        return false;
-    }
+    const char const testString2[LIMITATION_OF_STRING] = { "({[]})" };
+    const bool result2 = testCase(testString2, 2, true);
+  
+    const char const testString3[LIMITATION_OF_STRING] = { "]]]]]" };
+    const bool result3 = testCase(testString3, 3, false);
 
-    char const testString3[LIMITATION_OF_STRING] = { "]]]]]" };
-    if (testCase(testString1, 3))
-    {
-        printf("Error test number 3\n");
-        return false;
-    }
+    const char const testString4[LIMITATION_OF_STRING] = { "{(})" };
+    const bool result4 = testCase(testString4, 4, false);
 
-    char const testString4[LIMITATION_OF_STRING] = { "{(})" };
-    if (testCase(testString4, 4))
-    {
-        printf("Error test number 4\n");
-        return false;
-    }
+    const char const testString5[LIMITATION_OF_STRING] = { "()[{}]({}[])" };
+    const bool result5 = testCase(testString5, 5, true);
 
-    char const testString5[LIMITATION_OF_STRING] = { "()[{}]({}[])" };
-    if (testCase(testString1, 5))
-    {
-        printf("Error test number 5\n");
-        return false;
-    }
-
-    return true;
+    return result1 && result2 && result3 && result4 && result5;
 }

@@ -6,13 +6,13 @@
 typedef struct Stack Stack;
 
 //Places an element on the top of the stack
-Stack* push(const Stack* top, int const data, int* const errorCode);
+Stack* push(Stack* const top, int const data, int* const errorCode);
 
 //Checks the stack for elements content
 bool isEmpty(const Stack* const top);
 
 //Removes an element from the top of the stack
-Stack* pop(const Stack* top);
+Stack* pop(Stack* top);
 
 //Points to data from the top of the stack
 int top(const Stack* const stack);
@@ -21,4 +21,4 @@ int top(const Stack* const stack);
 Stack* nextNode(const Stack* const stack);
 
 //clear steack
-void clearStack(const Stack* stack);
+void clearStack(Stack* stack);

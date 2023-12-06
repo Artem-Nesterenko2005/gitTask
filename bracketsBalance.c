@@ -7,8 +7,6 @@
 #include "bracketsBalance.h"
 #include "codes.h"
 
-#define LIMITATION_OF_STRING 1000
-
 char* readString(int* const errorCode)
 {
     size_t length = 0;
@@ -41,11 +39,12 @@ char* readString(int* const errorCode)
         symbol = getchar();
     }
 
+    *errorCode = OK_CODE;
     string[length] = '\0';
     return string;
 }
 
-static char const oppositeBracket(char const symbol)
+static char const oppositeBracket(const char symbol)
 {
     switch (symbol)
     {
@@ -60,7 +59,7 @@ static char const oppositeBracket(char const symbol)
     }
 }
 
-bool bracketsBalance(const char* const string, size_t const length, int* const errorCode)
+bool bracketsBalance(const char* const string, const size_t length, int* const errorCode)
 {
     Stack* stack = NULL;
     for (size_t i = 0; i < length; ++i)
@@ -89,7 +88,7 @@ bool bracketsBalance(const char* const string, size_t const length, int* const e
                 return false;
             }
 
-            if (oppositeBracket(string[i]) != top(stack))
+            if (oppositeBracket(string[i]) != top(stack) || isEmpty(stack))
             {
                 clearStack(stack);
                 return false;

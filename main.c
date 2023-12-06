@@ -30,9 +30,9 @@ int main(void)
         printf("Error memory");
         return ERROR_MEMORY;
     }
-    size_t const length = strlen(string);
+    const size_t length = strlen(string);
 
-    bool const result = bracketsBalance(string, length, &errorCode);
+    const bool result = bracketsBalance(string, length, &errorCode);
 
     if (errorCode == ERROR_MEMORY)
     {
