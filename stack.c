@@ -3,31 +3,34 @@
 #include <stdlib.h>
 
 #include "stack.h"
+#include "../bracketsBalance/codes.h"
 
 typedef struct Stack
 {
-    size_t data;
+    int data;
     struct Stack* next;
-}Stack;
+} Stack;
 
-Stack* push(Stack* top, size_t const data)
+Stack* push(const Stack* top, int const data, int* const errorCode)
 {
     Stack* pointer = malloc(sizeof(Stack));
     if (pointer == NULL)
     {
+        *errorCode = ERROR_MEMORY;
         return top;
     }
     pointer->data = data;
     pointer->next = top;
+    *errorCode = OK_CODE;
     return pointer;
 }
 
-bool isEmpty(Stack* top)
+bool isEmpty(const Stack* const top)
 {
     return top == NULL;
 }
 
-Stack* pop(Stack* top)
+Stack* pop(const Stack* top)
 {
     if (isEmpty(top))
     {
@@ -35,11 +38,24 @@ Stack* pop(Stack* top)
     }
     Stack* pointer = top;
     top = top->next;
-    free(pointer);
+    free(&pointer->data);
     return top;
 }
 
-int top(Stack* stack)
+int top(const Stack* const stack)
 {
     return stack->data;
+}
+
+Stack* nextNode(const Stack* const stack)
+{
+    return stack->next;
+}
+
+void clearStack(const Stack* stack)
+{
+    while (!isEmpty(stack))
+    {
+        stack = pop(stack);
+    }
 }

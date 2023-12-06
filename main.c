@@ -5,14 +5,11 @@
 #include "../postfixCalculator/testStack.h"
 #include "test.h"
 #include "bracketsBalance.h"
-
-#define OK_CODE 1
-#define ERROR_TEST -1
-#define LIMITATION_OF_STRING 1000
+#include "codes.h"
 
 int main(void)
 {
-    if (!test())
+   if (!test())
     {
         printf("Error test");
         return ERROR_TEST;
@@ -24,10 +21,31 @@ int main(void)
         return ERROR_TEST;
     }
 
-    char const string[LIMITATION_OF_STRING] = { '\0' };
+    const int* const errorCode = OK_CODE;
+
     printf("Enter string (no more than 1000 symbols): ");
-    fgets(string, LIMITATION_OF_STRING, stdin);
+    const char* const string = readString(&errorCode);
+    if (errorCode == ERROR_MEMORY)
+    {
+        printf("Error memory");
+        return ERROR_MEMORY;
+    }
     size_t const length = strlen(string);
-    printf(bracketsBalance(string, length) ? "String is correct" : "String is not correct");
+
+    bool const result = bracketsBalance(string, length, &errorCode);
+
+    if (errorCode == ERROR_MEMORY)
+    {
+        printf("Error memory");
+        return ERROR_MEMORY;
+    }
+
+    if (errorCode == ERROR_STACK)
+    {
+        printf("Error stack");
+        return ERROR_STACK;
+    }
+
+    printf(result ? "String is correct" : "String is not correct");
     return OK_CODE;
 }
