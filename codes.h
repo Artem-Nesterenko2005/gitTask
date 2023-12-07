@@ -6,5 +6,6 @@ enum errorCodes
     ERROR_STACK,
     ERROR_MEMORY,
     ERROR_TEST,
-    ERROR_STACK_TEST
+    ERROR_STACK_TEST,
+    STRING_UNCORRECT
 };

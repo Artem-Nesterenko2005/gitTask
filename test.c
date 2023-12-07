@@ -20,16 +20,16 @@ static bool testCase(const char* const string, const size_t number, const bool r
 bool test(void)
 {
     const char* const testString1 = "(((((";
-    const bool result1 = testCase(testString1, 1, false, ERROR_STACK);
+    const bool result1 = testCase(testString1, 1, false, STRING_UNCORRECT);
 
     const char* const testString2 = "({[]})";
     const bool result2 = testCase(testString2, 2, true, OK_CODE);
   
     const char* const testString3 = "]]]]]";
-    const bool result3 = testCase(testString3, 3, false, ERROR_STACK);
+    const bool result3 = testCase(testString3, 3, false, STRING_UNCORRECT);
 
     const char* const testString4 = "{(})";
-    const bool result4 = testCase(testString4, 4, false, ERROR_STACK);
+    const bool result4 = testCase(testString4, 4, false, STRING_UNCORRECT);
 
     const char* const testString5 = "()[{}]({}[])";
     const bool result5 = testCase(testString5, 5, true, OK_CODE);
