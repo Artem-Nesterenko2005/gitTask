@@ -82,14 +82,10 @@ bool bracketsBalance(const char* const string, const size_t length, int* const e
         case ']':
         case '}':
         case ')':
-            if (stack == NULL)
-            {
-                clearStack(stack);
-                return false;
-            }
 
-            if (oppositeBracket(string[i]) != top(stack) || isEmpty(stack))
+            if (isEmpty(stack) || oppositeBracket(string[i]) != top(stack))
             {
+                *errorCode = ERROR_STACK;
                 clearStack(stack);
                 return false;
             }
@@ -107,7 +103,14 @@ bool bracketsBalance(const char* const string, const size_t length, int* const e
             continue;
         }
     }
-    const bool result = stack == NULL;
-    clearStack(stack);
-    return result;
+
+    if (!isEmpty(stack))
+    {
+        *errorCode = ERROR_STACK;
+        clearStack(stack);
+        return false;
+    }
+
+    *errorCode = OK_CODE;
+    return true;
 }

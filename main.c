@@ -46,6 +46,6 @@ int main(void)
         return ERROR_STACK;
     }
 
-    printf(result ? "String is correct" : "String is not correct");
+    printf("String is correct");
     return OK_CODE;
 }
