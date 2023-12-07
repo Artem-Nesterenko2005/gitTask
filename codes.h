@@ -7,5 +7,4 @@ enum errorCodes
     ERROR_MEMORY,
     ERROR_TEST,
     ERROR_STACK_TEST,
-    STRING_UNCORRECT
 };

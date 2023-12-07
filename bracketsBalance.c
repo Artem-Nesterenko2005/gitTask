@@ -85,14 +85,14 @@ bool bracketsBalance(const char* const string, const size_t length, int* const e
 
             if (isEmpty(stack) || oppositeBracket(string[i]) != top(stack))
             {
-                *errorCode = STRING_UNCORRECT;
+                *errorCode = OK_CODE;
                 clearStack(stack);
                 return false;
             }
 
             if (isEmpty(stack))
             {
-                *errorCode = STRING_UNCORRECT;
+                *errorCode = OK_CODE;
                 clearStack(stack);
                 return false;
             }
@@ -104,13 +104,5 @@ bool bracketsBalance(const char* const string, const size_t length, int* const e
         }
     }
 
-    if (!isEmpty(stack))
-    {
-        *errorCode = STRING_UNCORRECT;
-        clearStack(stack);
-        return false;
-    }
-
-    *errorCode = OK_CODE;
-    return true;
+    return isEmpty(stack);
 }
