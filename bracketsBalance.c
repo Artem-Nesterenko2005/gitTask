@@ -104,5 +104,8 @@ bool bracketsBalance(const char* const string, const size_t length, int* const e
         }
     }
 
-    return isEmpty(stack);
+    const bool result = isEmpty(stack);
+    clearStack(stack);
+    return result;
+
 }
