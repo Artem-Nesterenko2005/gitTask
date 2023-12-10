@@ -3,77 +3,48 @@
 
 #include "coutingRhyme.h"
 #include "list.h"
-#include "testList.h"
-#include "testCountingRhyme.h"
+#include "errorCodes.h"
 
-#define ERROR_CODE 0
-#define END_PROGRAM 1
-#define ERROR_TEST -1
-
-const Node* listFilling(Node* list, const unsigned int numberOfWarriors)
+Node* listFilling(Node* list, const unsigned int numberOfWarriors, int* const errorCode)
 {
     for (unsigned int i = 1; i <= numberOfWarriors; ++i)
     {
-        list = push(list, i);
+        list = push(list, i, errorCode);
+        if (*errorCode != OK_CODE)
+        {
+            return NULL;
+        }
     }
     return list;
 }
 
-const unsigned int survivorStartingPosition(const unsigned int numberKilled, const unsigned int numberOfWarriors)
+const unsigned int survivorStartingPosition(const unsigned int numberKilled, const unsigned int numberOfWarriors, int* const errorCode)
 {
     Node* list = NULL;
-    list = listFilling(list, numberOfWarriors);
+    list = listFilling(list, numberOfWarriors, errorCode);
+    if (list == NULL)
+    {
+        *errorCode = ERROR_MEMORY;
+        return 0;
+    }
     unsigned int position = 1;
     while (top(list) != nextNodeData(list))
     {
-        if (position % numberKilled == 0)
+        if ((position + 1 ) % numberKilled == 0)
         {
-            list = pop(list, top(list));
+            list = deleteNext(list, errorCode);
+            if (*errorCode != OK_CODE)
+            {
+                return 0;
+            }
             position = 1;
+            list = nextNode(list);
             continue;
         }
         ++position;
         list = nextNode(list);
     }
-    return top(list);
+    const unsigned int result = top(list);
+    free(list);
+    return result;
 }
-
-int main(void)
-{
-    const unsigned int listTestResult = testList();
-    if (listTestResult)
-    {
-        printf("Error list test %d", listTestResult);
-        return ERROR_TEST;
-    }
-
-    const unsigned int countingRhymeTestResult = testCountingRhyme();
-    if (countingRhymeTestResult)
-    {
-        printf("Error list test %d", countingRhymeTestResult);
-        return ERROR_TEST;
-    }
-
-    Node* const list = NULL;
-    const unsigned int numberOfWarriors = 0;
-    printf("Enter number of warriors ");
-    scanf_s("%d", &numberOfWarriors);
-    if (numberOfWarriors == 0)
-    {
-        printf("Error: the number of warriors is zero");
-        return ERROR_CODE;
-    }
-
-    const unsigned int numberKilled = 0;
-    printf("Enter number of killed ");
-    scanf_s("%d", &numberKilled);
-    if (numberKilled == 0)
-    {
-        printf("Error: the number of killed warriors is zero");
-        return ERROR_CODE;
-    }
-    const unsigned int position = survivorStartingPosition(numberKilled, numberOfWarriors);
-    printf("The warrior numbered %d will be last", position);
-    return END_PROGRAM;
-}
-

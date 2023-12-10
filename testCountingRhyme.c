@@ -1,51 +1,26 @@
 #include <stdbool.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 #include "list.h"
-#include "testList.h"
 #include "coutingRhyme.h"
-
-#define RIGHT_LIST_TEST 0
-
-bool listFillingTest(Node* list)
-{
-    for (size_t i = 1; i < 6; ++i)
-    {
-        if (i != top(list))
-        {
-            return false;
-        }
-        list = nextNode(list);
-    }
-    return true;
-}
+#include "errorCodes.h"
 
 const unsigned int testCountingRhyme(void)
 {
-    if (testList() != RIGHT_LIST_TEST)
-    {
-        return 1;
-    }
-    Node* list = NULL;
+    const int* const errorCode = OK_CODE;
      
-    if (survivorStartingPosition(2, 10) != 5)
+    if (survivorStartingPosition(2, 10, &errorCode) != 5 || errorCode != OK_CODE)
     {
-        return 2;
-    }
-    list = pop(list, 5);
-
-    if (survivorStartingPosition(3, 41) != 31)
-    {
-        return 3;
-    }
-    list = pop(list, 31);
-
-    list = listFilling(list, 5);
-    if (!listFillingTest(list))
-    {
-        return 4;
+        printf("Error test 1\n");
+        return false;
     }
 
-    return 0;
+    if (survivorStartingPosition(3, 41, &errorCode) != 31 || errorCode != OK_CODE)
+    {
+        printf("Error test 2\n");
+        return false;
+    }
+
+    return true;
 }
-

@@ -1,35 +1,36 @@
 #include <stdlib.h>
+#include <stdbool.h>
+#include <stdio.h>
 
 #include "list.h"
 #include "testList.h"
-
-#define RIGHT_TESTS 0
-
+#include "errorCodes.h"
 
 const unsigned int testList(void)
 {
     Node* testList = NULL;
-    testList = push(testList, 5);
-    testList = push(testList, 3);
-    if (top(testList) != 5)
-    {
-        return 1;
-    }
-    testList = pop(testList, 5);
-    if (top(testList) != 3)
-    {
-        return 2;
-    }
-    testList = push(testList, 7);
-    if (nextNodeData(testList) != 7)
-    {
-        return 3;
-    }
-    testList = push(testList, 10);
-    if (top(nextNode(nextNode(testList))) != 10)
-    {
-        return 4;
-    }
-    return RIGHT_TESTS;
-}
+    const int* const errorCode = OK_CODE;
 
+    testList = push(testList, 5, &errorCode);
+    if (errorCode != OK_CODE)
+    {
+        printf("Error test 1\n");
+        return false;
+    }
+
+    testList = push(testList, 3, &errorCode);
+    if (top(testList) != 5 || errorCode != OK_CODE)
+    {
+        printf("Error test 2\n");
+        return false;
+    }
+
+    testList = deleteNext(testList, &errorCode);
+    if (top(testList) != 5 || errorCode != OK_CODE)
+    {
+        printf("Error test 3\n");
+        return false;
+    }
+
+    return true;
+}

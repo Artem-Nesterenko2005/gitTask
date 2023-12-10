@@ -1,8 +1,7 @@
 #include <stdlib.h>
 
 #include "list.h"
-
-#define ERROR_LIST -1
+#include "errorCodes.h"
 
 typedef struct Node
 {
@@ -10,12 +9,14 @@ typedef struct Node
     struct Node* next;
 }Node;
 
-const Node* push(Node* list, const unsigned int data)
+const Node* push(Node* list, const unsigned int data, int* const errorCode)
 {
+    *errorCode = OK_CODE;
     Node* newElement = NULL;
     newElement = malloc(sizeof(Node));
     if (newElement == NULL)
     {
+        *errorCode = ERROR_MEMORY;
         return list;
     }
     newElement->data = data;
@@ -34,52 +35,39 @@ const Node* push(Node* list, const unsigned int data)
     return head;
 }
 
-const Node* pop(Node* list, const unsigned int data)
+const Node* deleteNext(Node* list, int* const errorCode)
 {
+    *errorCode = OK_CODE;
     if (list == NULL)
     {
         return list;
     }
-    const unsigned int topData = list->data;
-
-    while (list->next->data != topData)
-    {
-        if (list->next->data == data)
-        {
-            list->next = list->next->next;
-            return list->next;
-        }
-        list = list->next;
-    }
-
-    if (list->next->data == topData)
-    {
-        list->next = list->next->next;
-    }
-    return list->next;
+    Node* deleteNode = list->next;
+    list->next = list->next->next;
+    free(deleteNode);
+    return list;
 }
 
-const unsigned int top(Node* const list)
+const unsigned int top(const Node* const list)
 {
     if (list != NULL)
     {
         return list->data;
     }
-    return ERROR_LIST;
+    return NULL;
 }
 
-const unsigned int nextNodeData(Node* list)
+const unsigned int nextNodeData(const Node* const list)
 {
     if (list != NULL)
     {
         return list->next->data;
     }
-    return ERROR_LIST;
+    return NULL;
 }
 
-const Node* nextNode(Node* list)
+const Node* nextNode(const Node* list)
 {
     list = list->next;
     return list;
 }
-
