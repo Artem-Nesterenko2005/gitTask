@@ -11,7 +11,8 @@ static bool testPush(void)
     testList = push(testList, 10, &errorCode);
     if (errorCode != OK_CODE)
     {
-        printf("Error test number 1");
+        clearList(&testList);
+        printf("Error test number 1: push function\n");
         return false;
     }
     const bool result = dataNode(testList) == 10;
@@ -26,31 +27,42 @@ static bool testPop(void)
     testList = push(testList, 10, &errorCode);
     if (errorCode != OK_CODE)
     {
+        clearList(&testList);
+        printf("Error test number 2: push function\n");
         return false;
-        printf("Error test number 2");
     }
 
     if (dataNode(testList) != 10)
     {
+        clearList(&testList);
+        printf("Error test number 2: push function\n");
         return false;
     }
 
     testList = push(testList, 20, &errorCode);
     if (errorCode != OK_CODE)
     {
+        clearList(&testList);
+        printf("Error test number 2: push function\n");
         return false;
-        printf("Error test number 2");
     }
 
     if (dataNode(nextNode(testList)) != 20)
     {
+        clearList(&testList);
+        printf("Error test number 2: push function\n");
         return false;
-        printf("Error test number 2");
     }
 
-    testList = pop(testList, 15, &errorCode);
     testList = pop(testList, 10, &errorCode);
-    return dataNode(testList) == 20 && errorCode == SYMBOL_MISSING;
+    testList = pop(testList, 15, &errorCode);
+    const bool result = dataNode(testList) == 20 && errorCode == SYMBOL_MISSING;
+    if (!result)
+    {
+        printf("Error test number 2: pop function\n");
+    }
+    clearList(&testList);
+    return result;
 }
 
 bool test(void)

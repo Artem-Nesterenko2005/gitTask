@@ -32,8 +32,10 @@ int main(void)
 
     if (errorCode == ERROR_MEMORY)
     {
+        clearList(&list);
         printf("Error memory");
         return ERROR_MEMORY;
     }
+    clearList(&list);
     return OK_CODE;
 }

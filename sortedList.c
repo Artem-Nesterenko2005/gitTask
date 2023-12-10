@@ -13,6 +13,7 @@ typedef struct Node
 
 Node* push(Node* const list, const int data, int* const errorCode)
 {
+    *errorCode = OK_CODE;
     Node* node = (Node*)malloc(sizeof(Node));
     if (node == NULL)
     {
@@ -60,8 +61,9 @@ Node* push(Node* const list, const int data, int* const errorCode)
     return list;
 }
 
-Node* pop(const Node* list, const int data, int* const errorCode)
+Node* pop(Node* list, const int data, int* const errorCode)
 {
+    *errorCode = OK_CODE;
     if (list == NULL)
     {
         *errorCode = SYMBOL_MISSING;
@@ -110,4 +112,14 @@ int dataNode(const Node* const list)
 Node* nextNode(const Node* const list)
 {
     return list->next;
+}
+
+void clearList(const Node** list)
+{
+    while ((*list) != NULL)
+    {
+        Node* deleteNode = *list;
+        *list = (*list)->next;
+        free(deleteNode);
+    }
 }
