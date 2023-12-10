@@ -2,6 +2,7 @@
 #include <string.h>
 #include <malloc.h>
 #include <stdlib.h>
+#include <ctype.h>
 
 #include "stack.h"
 #include "codes.h"
@@ -38,7 +39,6 @@ char* readString(int* const errorCode)
 
         symbol = getchar();
     }
-
     string[length] = '\0';
     return string;
 }
@@ -57,45 +57,64 @@ static int priority(const char symbol)
         return 2;
 
     default:
-        return 0;
+        return isdigit(symbol) ? 0 : -1;
     }
 }
 
-char* stringProcessing(char* const string, char* const finalString, int* const errorCode)
+char* stringProcessing(char* const string, int* const errorCode)
 {
     Stack* stack = NULL;
+    char* const finalString = (char*)calloc(strlen(string) + 2, sizeof(char));
     size_t indexFinalString = 0; 
     const size_t lengthString = strlen(string);
     for (size_t i = 0; i < lengthString; ++i)
     {
+        if (string[i] == ' ')
+        {
+            continue;
+        }
+
         if (string[i] == '(')
         {
             stack = push(stack, string[i], errorCode);
             if (*errorCode != OK_CODE)
             {
                 clearStack(stack);
-                return string;
+                return NULL;
             }
             continue;
         }
         if (string[i] == ')')
         {
-            while (top(stack) != '(')
+            if (stack != NULL)
             {
-                finalString[indexFinalString] = top(stack);
-                stack = pop(stack);
-                ++indexFinalString;
+                while (top(stack) != '(')
+                {
+                    finalString[indexFinalString] = top(stack);
+                    stack = pop(stack);
+                    ++indexFinalString;
+                    finalString[indexFinalString] = ' ';
+                    ++indexFinalString;
+                }
             }
             stack = pop(stack);
             continue;
         }
 
-        const size_t prioritySymbol = priority(string[i]);
+        const int prioritySymbol = priority(string[i]);
+        if (prioritySymbol == -1)
+        {
+            clearStack(stack);
+            *errorCode = UNVALIDATION_STRING;
+            return NULL;
+        }
         switch (prioritySymbol)
         {
 
         case 0:
             finalString[indexFinalString] = string[i];
+            ++indexFinalString;
+            finalString[indexFinalString] = ' ';
             ++indexFinalString;
             break;
 
@@ -107,7 +126,7 @@ char* stringProcessing(char* const string, char* const finalString, int* const e
                 if (*errorCode != OK_CODE)
                 {
                     clearStack(stack);
-                    return string;
+                    return NULL;
                 }
                 break;
             }
@@ -115,12 +134,14 @@ char* stringProcessing(char* const string, char* const finalString, int* const e
             if (priority(top(stack)) == prioritySymbol)
             {
                 finalString[indexFinalString] = top(stack);
+                ++indexFinalString;
+                finalString[indexFinalString] = ' ';
                 stack = pop(stack);
                 stack = push(stack, string[i], errorCode);
                 if (*errorCode != OK_CODE)
                 {
                     clearStack(stack);
-                    return string;
+                    return NULL;
                 }
                 ++indexFinalString;
                 break;
@@ -131,13 +152,17 @@ char* stringProcessing(char* const string, char* const finalString, int* const e
                 finalString[indexFinalString] = top(stack);
                 stack = pop(stack);
                 ++indexFinalString;
+
+                finalString[indexFinalString] = ' ';
+                ++indexFinalString;
+
                 if (isEmpty(stack))
                 {
                     stack = push(stack, string[i], errorCode);
                     if (*errorCode != OK_CODE)
                     {
                         clearStack(stack);
-                        return string;
+                        return NULL;
                     }
                     break;
                 }
@@ -150,17 +175,11 @@ char* stringProcessing(char* const string, char* const finalString, int* const e
         finalString[indexFinalString] = top(stack);
         stack = pop(stack);
         ++indexFinalString;
+        finalString[indexFinalString] = ' ';
+        ++indexFinalString;
     }
     finalString[indexFinalString] = '\0';
 
     clearStack(stack);
     return finalString;
-}
-
-void printString(char* const string, const size_t length)
-{
-    for (size_t i = 0; i < length; ++i)
-    {
-        printf("%c", string[i]);
-    }
 }

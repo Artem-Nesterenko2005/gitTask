@@ -3,7 +3,7 @@
 #include <malloc.h>
 
 #include "stack.h"
-#include "../bracketsBalance/codes.h"
+#include "codes.h"
 #include "sotringStation.h"
 #include "testStack.h"
 #include "test.h"
@@ -25,34 +25,31 @@ int main(void)
     const int* const errorCode = OK_CODE;
 
     printf("Enter an expression: ");
-    const char* const string = readString(&errorCode);
-    if (string == NULL)
-    {
-        printf("Error memory");
-        return ERROR_MEMORY;
-    }
-
-    const char* const finalString = (char*)calloc(strlen(string) + 1, sizeof(char));
-    if (finalString == NULL)
+    const char* string = readString(&errorCode);
+    if (errorCode != OK_CODE)
     {
         printf("Error memory");
         free(string);
         return ERROR_MEMORY;
     }
 
-    stringProcessing(string, finalString, &errorCode);
+    string = stringProcessing(string, &errorCode);
 
     if (errorCode == ERROR_MEMORY)
     {
         free(string);
-        free(finalString);
         printf("Error memory");
         return ERROR_MEMORY;
     }
 
-    printf("Postfix form: ");
-    printString(finalString, strlen(finalString));
+    if (errorCode == UNVALIDATION_STRING)
+    {
+        free(string);
+        printf("Unvalidation string");
+        return UNVALIDATION_STRING;
+    }
+
+    printf("Postfix form: %s", string);
     free(string);
-    free(finalString);
     return OK_CODE;
 }

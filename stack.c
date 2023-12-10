@@ -38,7 +38,7 @@ Stack* pop(Stack* top)
     }
     Stack* pointer = top;
     top = top->next;
-    free(&pointer->data);
+    free(pointer);
     return top;
 }
 

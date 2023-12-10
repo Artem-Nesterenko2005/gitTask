@@ -22,12 +22,14 @@ static bool testPopAndTopStack(void)
     stack = push(stack, 1, &errorCode);
     if (stack == NULL || errorCode != OK_CODE)
     {
+        clearStack(stack);
         return false;
     }
 
     stack = push(stack, 2, &errorCode);
     if (stack == NULL || errorCode != OK_CODE)
     {
+        clearStack(stack);
         return false;
     }
 
