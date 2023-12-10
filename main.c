@@ -1,55 +1,41 @@
 #include <stdio.h>
-#include <string.h>
-#include <malloc.h>
+#include <stdlib.h>
 
-#include "stack.h"
-#include "errorCodes.h"
-#include "sotringStation.h"
-#include "testStack.h"
+#include "sortedList.h"
+#include "listOperation.h"
 #include "test.h"
+#include "errorCode.h"
+
+#define ORIGINAL_MEANING 1
+#define EXIT_NUMBER 0
 
 int main(void)
 {
     if (!test())
     {
-       printf("Error test");
-       return ERROR_TEST;
+        printf("Error test");
+        return ERROR_TEST;
     }
-
-    if (!testStack())
-    {
-        printf("Error stack test");
-        return ERROR_STACK_TEST;
-    }
-
+    size_t transactionNumber = ORIGINAL_MEANING;
+    const Node* list = NULL;
     const int* const errorCode = OK_CODE;
-
-    printf("Enter an expression: ");
-    const char* string = readString(&errorCode);
-    if (errorCode != OK_CODE)
+    while (transactionNumber != EXIT_NUMBER && errorCode == OK_CODE)
     {
-        printf("Error memory");
-        free(string);
-        return ERROR_MEMORY;
+        printf("0 - exit\n");
+        printf("1 - add value to sorted list\n");
+        printf("2 - remove value from list\n");
+        printf("3 - print list\n");
+        printf("Select operation: ");
+        scanf_s("%Iu", &transactionNumber);
+        list = listOperations(transactionNumber, list, &errorCode);
     }
-
-    string = stringProcessing(string, &errorCode);
 
     if (errorCode == ERROR_MEMORY)
     {
-        free(string);
+        clearList(&list);
         printf("Error memory");
         return ERROR_MEMORY;
     }
-
-    if (errorCode == UNVALIDATION_STRING)
-    {
-        free(string);
-        printf("Unvalidation string");
-        return UNVALIDATION_STRING;
-    }
-
-    printf("Postfix form: %s", string);
-    free(string);
+    clearList(&list);
     return OK_CODE;
 }

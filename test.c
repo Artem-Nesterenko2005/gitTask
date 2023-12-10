@@ -1,45 +1,71 @@
-#include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
-#include <string.h>
 
-#include "errorCodes.h"
-#include "sotringStation.h"
+#include "sortedList.h"
+#include "errorCode.h"
 
-static bool testCase(const char* string, const int* errorCode, const char* const rightString, const size_t number)
+static bool testPush(void)
 {
-    string = stringProcessing(string, errorCode);
-
-    if (string == NULL || rightString == NULL)
+    const int* const errorCode = OK_CODE;
+    Node* testList = NULL;
+    testList = push(testList, 10, &errorCode);
+    if (errorCode != OK_CODE)
     {
+        clearList(&testList);
+        printf("Error test number 1: push function\n");
+        return false;
+    }
+    const bool result = dataNode(testList) == 10;
+    free(testList);
+    return result;
+}
+
+static bool testPop(void)
+{
+    const int* const errorCode = OK_CODE;
+    Node* testList = NULL;
+    testList = push(testList, 10, &errorCode);
+    if (errorCode != OK_CODE)
+    {
+        clearList(&testList);
+        printf("Error test number 2: push function\n");
         return false;
     }
 
-    if (strcmp(string, rightString) || *errorCode != OK_CODE)
+    if (dataNode(testList) != 10)
     {
-        free(string);
-        printf("Error test number %Iu\n", number);
+        clearList(&testList);
+        printf("Error test number 2: push function\n");
         return false;
     }
-    free(string);
-    return true;
+
+    testList = push(testList, 20, &errorCode);
+    if (errorCode != OK_CODE)
+    {
+        clearList(&testList);
+        printf("Error test number 2: push function\n");
+        return false;
+    }
+
+    if (dataNode(nextNode(testList)) != 20)
+    {
+        clearList(&testList);
+        printf("Error test number 2: push function\n");
+        return false;
+    }
+
+    testList = pop(testList, 10, &errorCode);
+    testList = pop(testList, 15, &errorCode);
+    const bool result = dataNode(testList) == 20 && errorCode == SYMBOL_MISSING;
+    if (!result)
+    {
+        printf("Error test number 2: pop function\n");
+    }
+    clearList(&testList);
+    return result;
 }
 
 bool test(void)
 {
-    const int* const errorCode = OK_CODE;
-
-    const char* const testString1 = "1 / 2 / 3 / 4 / 5 / 6";
-    const char* const rightString1 = "1 2 / 3 / 4 / 5 / 6 / ";
-    const bool result1 = testCase(testString1, &errorCode, rightString1, 1);
-
-    const char* const testString2 = "( 1 - 2 * 3 ) *  4- 5";
-    const char* const rightString2 = "1 2 3 * - 4 * 5 - ";
-    const bool result2 = testCase(testString2, &errorCode, rightString2, 2);
-
-    const char* const testString3 = "1 - 2 / 3 + 4";
-    const char* const rightString3 = "1 2 3 / - 4 + ";
-    const bool result3 = testCase(testString3, &errorCode, rightString3, 3);
-
-    return result1 && result2 && result3;
+    return testPush() && testPop();
 }
