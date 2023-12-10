@@ -3,7 +3,7 @@
 
 #include "../postfixCalculator/stack.h"
 #include "testStack.h"
-#include "../bracketsBalance/codes.h"
+#include "errorCodes.h"
 
 static bool testPushAndTopStack(void)
 {

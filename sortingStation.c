@@ -5,7 +5,7 @@
 #include <ctype.h>
 
 #include "stack.h"
-#include "codes.h"
+#include "errorCodes.h"
 #include "sotringStation.h"
 
 char* readString(int* const errorCode)

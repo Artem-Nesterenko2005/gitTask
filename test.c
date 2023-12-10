@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "codes.h"
+#include "errorCodes.h"
 #include "sotringStation.h"
 
 static bool testCase(const char* string, const int* errorCode, const char* const rightString, const size_t number)

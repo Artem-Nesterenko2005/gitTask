@@ -3,7 +3,7 @@
 #include <stdlib.h>
 
 #include "stack.h"
-#include "../bracketsBalance/codes.h"
+#include "errorCodes.h"
 
 typedef struct Stack
 {
