@@ -10,6 +10,11 @@ static bool testCase(const char* string, const int* errorCode, const char* const
 {
     string = stringProcessing(string, errorCode);
 
+    if (string == NULL || rightString == NULL)
+    {
+        return false;
+    }
+
     if (strcmp(string, rightString) || *errorCode != OK_CODE)
     {
         free(string);
