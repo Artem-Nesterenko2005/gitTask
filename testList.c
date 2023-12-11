@@ -11,7 +11,7 @@ const unsigned int testList(void)
     Node* testList = NULL;
     const int* const errorCode = OK_CODE;
 
-    testList = push(testList, 5, &errorCode);
+    testList = listFilling(3, &errorCode);
     if (errorCode != OK_CODE)
     {
         clearList(testList);
@@ -19,16 +19,8 @@ const unsigned int testList(void)
         return false;
     }
 
-    testList = push(testList, 3, &errorCode);
-    if (top(testList) != 5 || errorCode != OK_CODE)
-    {
-        clearList(testList);
-        printf("Error test 2\n");
-        return false;
-    }
-
     testList = deleteNext(testList, &errorCode);
-    if (top(testList) != 5 || errorCode != OK_CODE)
+    if (top(testList) != 1 || errorCode != OK_CODE)
     {
         clearList(testList);
         printf("Error test 3\n");

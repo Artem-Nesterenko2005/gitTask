@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <malloc.h>
 
 #include "list.h"
 #include "errorCodes.h"
@@ -9,43 +10,29 @@ typedef struct Node
     struct Node* next;
 }Node;
 
-const Node* push(Node* list, const unsigned int data, int* const errorCode)
+Node* listFilling(const unsigned int numberOfWarriors, int* const errorCode)
 {
-    *errorCode = OK_CODE;
-    Node* newElement = (Node*)malloc(sizeof(Node));
-    if (newElement == NULL)
-    {
-        *errorCode = ERROR_MEMORY;
-        return list;
-    }
-    newElement->data = data;
+    Node* list = (Node*)malloc(sizeof(Node));
     if (list == NULL)
     {
-        newElement->next = newElement;
-        return newElement;
+        *errorCode = ERROR_MEMORY;
+        return NULL;
     }
-    const Node* head = list;
-    while (list->next->data != head->data)
+    Node* head = list;
+    for (unsigned int i = 1; i < numberOfWarriors; ++i)
     {
-        list = list->next;
-    }
-    list->next = newElement;
-    list->next->next = head;
-    return head;
-}
-
-Node* listFilling(Node* list, const unsigned int numberOfWarriors, int* const errorCode)
-{
-    for (unsigned int i = 1; i <= numberOfWarriors; ++i)
-    {
-        list = push(list, i, errorCode);
-        if (*errorCode != OK_CODE)
+        list->data = i;
+        list->next = (Node*)malloc(sizeof(Node));
+        if (list->next == NULL)
         {
-            clearList(list, *errorCode);
+            *errorCode = ERROR_MEMORY;
             return NULL;
         }
+        list = list->next;
     }
-    return list;
+    list->data = numberOfWarriors;
+    list->next = head;
+    return list->next;
 }
 
 const Node* deleteNext(Node* const list)

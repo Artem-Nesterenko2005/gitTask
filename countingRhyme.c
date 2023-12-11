@@ -8,7 +8,7 @@
 const unsigned int survivorStartingPosition(const unsigned int numberKilled, const unsigned int numberOfWarriors, int* const errorCode)
 {
     Node* list = NULL;
-    list = listFilling(list, numberOfWarriors, errorCode);
+    list = listFilling(numberOfWarriors, errorCode);
     if (list == NULL)
     {
         *errorCode = ERROR_MEMORY;

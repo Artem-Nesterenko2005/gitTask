@@ -3,11 +3,8 @@
 //struct for list
 typedef struct Node Node;
 
-//function to add data to a list, return list if memory error
-const Node* push(Node* list, const unsigned int data, int* const errorCode);
-
 //fills a list with elements up to a given number
-Node* listFilling(Node* list, const unsigned int numberOfWarriors, int* const errorCode);
+Node* listFilling(const unsigned int numberOfWarriors, int* const errorCode);
 
 //function to remove data from a list, if list is empty, return list
 const Node* deleteNext(Node* const list);
