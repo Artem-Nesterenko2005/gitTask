@@ -10,6 +10,16 @@ typedef struct Node
     struct Node* next;
 }Node;
 
+void clearList(Node* list)
+{
+    while (list->next->data != list->data)
+    {
+        deleteNext(list);
+    }
+    free(list);
+}
+
+
 Node* listFilling(const unsigned int numberOfWarriors, int* const errorCode)
 {
     Node* list = (Node*)malloc(sizeof(Node));
@@ -26,6 +36,7 @@ Node* listFilling(const unsigned int numberOfWarriors, int* const errorCode)
         if (list->next == NULL)
         {
             *errorCode = ERROR_MEMORY;
+            clearList(list);
             return NULL;
         }
         list = list->next;
@@ -59,13 +70,4 @@ const unsigned int top(const Node* const list)
 const Node* nextNode(const Node* const list)
 {
     return list->next;
-}
-
-void clearList(Node* list)
-{
-    while (list->next->data != list->data)
-    {
-        deleteNext(list);
-    }
-    free(list);
 }
