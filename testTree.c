@@ -4,23 +4,24 @@
 
 #include "tree.h"
 #include "testTree.h"
+#include "errorCodes.h"
 
 bool testTree(void)
 {
     Tree* tree = NULL;
     tree = makeRoot(tree);
-    if (leftChildren(leftChildren(tree)) != NULL || rightChildren(rightChildren(tree)) != NULL)
+    if (parent(tree) != NULL || leftChildren(tree) != NULL || rightChildren(tree) != NULL)
     {
         printf("Error test number 1");
         return false;
     }
 
-    tree = addData(tree, 'a');
-    if (data(leftChildren(tree)) != 'a')
+    const int* const errorCode = OK_CODE;
+    tree = addData(tree, 1, &errorCode);
+    if (data(leftChildren(tree)) != 1 || errorCode != OK_CODE)
     {
         printf("Error test number 2");
         return false;
     }
     return true;
 }
-

@@ -1,43 +1,50 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "testStack.h"
-#include "postfixCalculator.h"
-#include "testStack.h"
 #include "tree.h"
 #include "parseTree.h"
 #include "testTree.h"
-
-#define ERROR_TEST -1
-#define EMPTY_FILE -2
-#define LIMITATION 100
-#define END 0
+#include "errorCodes.h"
+#include "testPareseTree.h"
 
 int main(void)
 {
-    if (testStack() != true || testTree() != true)
+    if (!testTree())
     {
-        printf("Error test");
+        printf("Error test\n");
+        return ERROR_TEST;
+    }
+
+    if (!testParseTree())
+    {
+        printf("Error parse tree test\n");
         return ERROR_TEST;
     }
     Tree* tree = NULL;
-    char string[LIMITATION] = { '\0' };
-    readingFile(string);
-
-    tree = makeTree(tree, string);
-    if (tree == NULL)
+    const int* const errorCode = OK_CODE;
+    const char* const string = readString(&errorCode, "expression.txt");
+    if (errorCode != OK_CODE)
     {
-        printf("File is empty");
+        free(string);
+        printf("Error memory");
+        return ERROR_MEMORY;
+    }
+
+    tree = makeTree(string, &errorCode);
+    if (errorCode == EMPTY_FILE)
+    {
+        clearTree(tree);
+        free(string);
+        printf("Parsing error\n");
         return EMPTY_FILE;
     }
 
     printf("Expression: ");
     printTree(tree);
 
-    char resultString[LIMITATION] = { '\0' };
-    postfixNotation(tree, resultString);
-    printf("\nResult of expression: %d", postfixCalculator(resultString, strlen(resultString)));
-    free(tree);
-    return END;
-}
+    printf("\nResult of expression: %d ", resultCalculation(tree));
 
+    clearTree(tree);
+    free(string);
+    return OK_CODE;
+}
