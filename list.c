@@ -12,8 +12,7 @@ typedef struct Node
 const Node* push(Node* list, const unsigned int data, int* const errorCode)
 {
     *errorCode = OK_CODE;
-    Node* newElement = NULL;
-    newElement = malloc(sizeof(Node));
+    Node* newElement = (Node*)malloc(sizeof(Node));
     if (newElement == NULL)
     {
         *errorCode = ERROR_MEMORY;
@@ -35,9 +34,22 @@ const Node* push(Node* list, const unsigned int data, int* const errorCode)
     return head;
 }
 
-const Node* deleteNext(Node* list, int* const errorCode)
+Node* listFilling(Node* list, const unsigned int numberOfWarriors, int* const errorCode)
 {
-    *errorCode = OK_CODE;
+    for (unsigned int i = 1; i <= numberOfWarriors; ++i)
+    {
+        list = push(list, i, errorCode);
+        if (*errorCode != OK_CODE)
+        {
+            clearList(list, *errorCode);
+            return NULL;
+        }
+    }
+    return list;
+}
+
+const Node* deleteNext(Node* const list)
+{
     if (list == NULL)
     {
         return list;
@@ -57,17 +69,16 @@ const unsigned int top(const Node* const list)
     return NULL;
 }
 
-const unsigned int nextNodeData(const Node* const list)
+const Node* nextNode(const Node* const list)
 {
-    if (list != NULL)
-    {
-        return list->next->data;
-    }
-    return NULL;
+    return list->next;
 }
 
-const Node* nextNode(const Node* list)
+void clearList(Node* list)
 {
-    list = list->next;
-    return list;
+    while (list->next->data != list->data)
+    {
+        deleteNext(list);
+    }
+    free(list);
 }

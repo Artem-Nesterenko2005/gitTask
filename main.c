@@ -18,7 +18,7 @@ int main(void)
 
     if (!testCountingRhyme())
     {
-        printf("Error list test");
+        printf("Error countingRhyme module test");
         return ERROR_TEST;
     }
 
@@ -38,7 +38,7 @@ int main(void)
     scanf_s("%d", &numberKilled);
     if (numberKilled == 0)
     {
-        printf("Error: the number of killed warriors is zero");
+        printf("Number of the person being killed: %d", numberKilled);
         return NULL_VARIABLES;
     }
     const unsigned int position = survivorStartingPosition(numberKilled, numberOfWarriors, &errorCode);

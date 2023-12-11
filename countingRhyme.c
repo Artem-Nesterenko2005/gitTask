@@ -5,19 +5,6 @@
 #include "list.h"
 #include "errorCodes.h"
 
-Node* listFilling(Node* list, const unsigned int numberOfWarriors, int* const errorCode)
-{
-    for (unsigned int i = 1; i <= numberOfWarriors; ++i)
-    {
-        list = push(list, i, errorCode);
-        if (*errorCode != OK_CODE)
-        {
-            return NULL;
-        }
-    }
-    return list;
-}
-
 const unsigned int survivorStartingPosition(const unsigned int numberKilled, const unsigned int numberOfWarriors, int* const errorCode)
 {
     Node* list = NULL;
@@ -28,18 +15,13 @@ const unsigned int survivorStartingPosition(const unsigned int numberKilled, con
         return 0;
     }
     unsigned int position = 1;
-    while (top(list) != nextNodeData(list))
+    while (list != list->next)
     {
-        if ((position + 1 ) % numberKilled == 0)
+        if ((position + 1) % numberKilled == 0)
         {
             list = deleteNext(list, errorCode);
-            if (*errorCode != OK_CODE)
-            {
-                return 0;
-            }
-            position = 1;
+            position = 0;
             list = nextNode(list);
-            continue;
         }
         ++position;
         list = nextNode(list);

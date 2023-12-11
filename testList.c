@@ -14,6 +14,7 @@ const unsigned int testList(void)
     testList = push(testList, 5, &errorCode);
     if (errorCode != OK_CODE)
     {
+        clearList(testList);
         printf("Error test 1\n");
         return false;
     }
@@ -21,6 +22,7 @@ const unsigned int testList(void)
     testList = push(testList, 3, &errorCode);
     if (top(testList) != 5 || errorCode != OK_CODE)
     {
+        clearList(testList);
         printf("Error test 2\n");
         return false;
     }
@@ -28,9 +30,11 @@ const unsigned int testList(void)
     testList = deleteNext(testList, &errorCode);
     if (top(testList) != 5 || errorCode != OK_CODE)
     {
+        clearList(testList);
         printf("Error test 3\n");
         return false;
     }
 
+    clearList(testList);
     return true;
 }
