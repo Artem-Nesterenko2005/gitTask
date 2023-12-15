@@ -9,15 +9,15 @@ int* quickSort(int* const array, const size_t firstLimitation, const size_t seco
 
     size_t largeIndex = firstLimitation;
     size_t lowIndex = secondLimitation;
-    size_t elementFor—omparison = array[(secondLimitation + firstLimitation) / 2];
+    size_t elementForComparison = array[(secondLimitation + firstLimitation) / 2];
 
     while (largeIndex <= lowIndex)
     {
-        while (array[largeIndex] < elementFor—omparison)
+        while (array[largeIndex] < elementForComparison)
         {
             ++largeIndex;
         }
-        while (array[lowIndex] > elementFor—omparison)
+        while (array[lowIndex] > elementForComparison)
         {
             --lowIndex;
         }
