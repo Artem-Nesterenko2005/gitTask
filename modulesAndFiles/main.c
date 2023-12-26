@@ -32,6 +32,7 @@ int main(void)
     const int* array = fillingArray(string, &length, &errorCode);
     if (errorCode != OK_CODE)
     {
+        free(string);
         free(array);
         printf("Error memory");
         return ERROR_MEMORY;

@@ -56,19 +56,21 @@ char* readFile(int* const errorCode, const char* const fileName)
 
 int* fillingArray(char* string, size_t* const length, int* const errorCode)
 {
-    int* array = NULL;
+    int* array = (int*)malloc(sizeof(int));
     size_t capacity = 1;
     for (size_t i = 0; *string != '\0'; ++i)
     {
-        capacity *= 2;
-        char* tmp = (int*)realloc(array, capacity * sizeof(int));
-        if (tmp == NULL)
+        if (*length >= capacity)
         {
-            free(string);
-            *errorCode = ERROR_MEMORY;
-            return NULL;
+            capacity *= 2;
+            char* tmp = (int*)realloc(array, capacity * sizeof(int));
+            if (tmp == NULL)
+            {
+                *errorCode = ERROR_MEMORY;
+                return NULL;
+            }
+            array = tmp;
         }
-        array = tmp;
         ++*length;
         array[i] = atoi(string);
         while (*string != ' ')
@@ -81,7 +83,7 @@ int* fillingArray(char* string, size_t* const length, int* const errorCode)
             ++string;
         }
     }
-    array = (int*)realloc(array, *length * sizeof(int));
+    array[*length] = '\0';
 
     return array;
 }
