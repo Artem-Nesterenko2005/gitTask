@@ -12,5 +12,9 @@ bool test(void)
 
     const char* const string3 = { "1111111111111111.22222222222222222E+333333333" };
 
-    return realNumberLexer(string1) && !realNumberLexer(string2) && realNumberLexer(string3);
+    const char* const string4 = { ".EE+123" };
+
+    const char* const string5 = { "E+4" };
+
+    return realNumberLexer(string1) && !realNumberLexer(string2) && realNumberLexer(string3) && !realNumberLexer(string4) && !realNumberLexer(string5);
 }

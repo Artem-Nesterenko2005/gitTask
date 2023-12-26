@@ -9,74 +9,73 @@ enum States
 {
     firstNumber,
     wholePart,
-    fraction,
-    fractionAndE,
+    fractionDigits,
+    stateE,
     sign,
     degree
 };
 
 bool realNumberLexer(const char* const string)
 {
-    size_t state = 0;
+    size_t state = firstNumber;
     const size_t length = strlen(string);
     for (size_t i = 0; i < length; ++i)
     {
+        const char curChar = string[i];
         switch (state)
         {
         case firstNumber:
-            if (isdigit(string[i]))
+            if (isdigit(curChar))
             {
                 state = wholePart;
                 break;
             }
             return false;
-
         case wholePart:
-            if (isdigit(string[i]))
+            if (isdigit(curChar))
             {
                 state = wholePart;
                 break;
             }
-
-            if (string[i] == '.')
+            if (curChar == '.')
             {
-                state = fraction;
+                state = fractionDigits;
+                break;
+            }
+            if (curChar == 'E');
+            {
+                state = stateE;
                 break;
             }
             return false;
-
-        case fraction:
-            if (isdigit(string[i]))
+        case fractionDigits:
+            if (isdigit(curChar))
             {
-                state = fractionAndE;
+                state = fractionDigits;
+                break;
+            }
+            if (curChar == 'E')
+            {
+                state = stateE;
                 break;
             }
             return false;
-
-        case fractionAndE:
-            if (isdigit(string[i]))
-            {
-                state = fractionAndE;
-                break;
-            }
-
-            if (string[i] == 'E')
+        case stateE:
+            if (curChar == '+' || curChar == '-')
             {
                 state = sign;
                 break;
             }
             return false;
-
         case sign:
-            if (string[i] == '+' || string[i] == '-')
+            if (isdigit(curChar))
             {
                 state = degree;
                 break;
             }
             return false;
-
         case degree:
-            if (isdigit(string[i]))
+            if (isdigit(curChar))
             {
                 state = degree;
                 break;
