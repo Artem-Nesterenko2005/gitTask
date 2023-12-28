@@ -1,7 +1,6 @@
 #pragma once
 
-// read file string
-char* readFile(int* const errorCode, const char* const fileName);
+#include <stdlib.h>
 
-// read users string
-char* readString(int* const errorCode);
+// read file string
+char* readLine(int* const errorCode, char* file);

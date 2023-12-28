@@ -31,7 +31,7 @@ int* prefixFunction(const char* const string, int* const errorCode)
     return array;
 }
 
-int numberOccurrences(const char* const string, const char* const subString, int* const errorCode)
+int numberOccurence(const char* const string, const char* const subString, int* const errorCode)
 {
     int* array = prefixFunction(subString, errorCode);
     const size_t lengthString = strlen(string);
@@ -45,15 +45,14 @@ int numberOccurrences(const char* const string, const char* const subString, int
             if (string[i + j] == subString[j])
             {
                 ++counter;
+                if (counter == lengthSubString)
+                {
+                    return i;
+                }
             }
             else
             {
                 i += array[counter];
-                break;
-            }
-            if (counter == lengthSubString)
-            {
-                return i;
             }
         }
     }

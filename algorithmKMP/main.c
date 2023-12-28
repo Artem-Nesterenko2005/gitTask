@@ -15,9 +15,13 @@ int main(void)
     }
     int* const errorCode = OK_CODE;
 
-    const char* const string = readFile(&errorCode, "file.txt");
+    FILE* file = NULL;
+    fopen_s(&file, "file.txt", "r");
+    const char* const string = readLine(&errorCode, file);
+    fclose(file);
     if (errorCode != OK_CODE)
     {
+        free(string);
         if (errorCode == FILE_ERROR)
         {
             printf("File error");
@@ -28,20 +32,21 @@ int main(void)
     }
 
     printf("Enter string ");
-    const char* const subString = readString(&errorCode);
+    const char* const subString = readLine(&errorCode, stdin);
     if (errorCode != OK_CODE)
     {
+        free(string);
         printf("Memory error");
         return MEMORY_ERROR;
     }
-    const int result = numberOccurrences(string, subString, &errorCode);
+    const int result = numberOccurence(string, subString, &errorCode);
     if (errorCode != OK_CODE)
     {
         printf("Memory error");
         return MEMORY_ERROR;
     }
 
-    if (result == -1)
+    if (result == NO_SUBSTRING)
     {
         printf("No substring");
         return OK_CODE;
