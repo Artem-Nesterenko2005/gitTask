@@ -7,13 +7,12 @@
 #include "hashTable.h"
 #include "list.h"
 
-#define LIMITATION 100
 #define START_NUMBER 1
 
 typedef struct Node
 {
-    char key[LIMITATION];
-    int data;
+    char* key;
+    int count;
     Node* next;
 } Node;
 
@@ -39,10 +38,10 @@ List* addData(List* list, const char* const key, int* const errorCode)
     if (node == NULL)
     {
         *errorCode = ERROR_MEMORY;
-        return NULL;
+        return list;
     }
-    strcpy_s(node->key, LIMITATION, key);
-    node->data = START_NUMBER;
+    node->key = key;
+    node->count = START_NUMBER;
     ++list->length;
     if (list->head == NULL)
     {
@@ -60,7 +59,7 @@ void printList(const List* const list)
     Node* node = list->head;
     while (node != NULL)
     { 
-        printf("%s - %d\n", node->key, node->data);
+        printf("%s - %d\n", node->key, node->count);
         node = node->next;
     }
 }
@@ -75,29 +74,44 @@ bool checkNodes(const List* const list, const char* const key)
     return node == NULL;
 }
 
-List* deleteList(List* list)
+void deleteList(List* const list)
 {
     while (list->head != NULL)
     {
         Node* node = list->head;
         list->head = node->next;
         free(node->key);
+        free(node);
     }
-    return NULL;
 }
 
-int data(const Node* const list)
+int count(const Node* const list)
 {
-    return list->data;
+    return list->count;
 }
 
 size_t length(const List* const list)
 {
-
     return list->length;
 }
 
-void newData(List* list)
+void newData(List* list, const char* const word)
 {
-    ++list->head->data;
+    while (strcmp(list->head->key, word) != 0)
+    {
+        list->head = list->head->next;
+    }
+    ++list->head->count;
+}
+
+size_t checkList(List* const list)
+{
+    size_t result = 0;
+    while (list->head != NULL)
+    {
+        result += list->head->count;
+        Node* node = list->head;
+        list->head = node->next;
+    }
+    return result;
 }

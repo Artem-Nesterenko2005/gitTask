@@ -15,21 +15,23 @@ int main(void)
     }
 
     const int* const errorCode = OK_CODE;
-    Table* table = workWithFile("file.txt", &errorCode);
+    Table* table = workWithFile("file.txt", &errorCode, 174);
     if (errorCode != OK_CODE)
     {
         if (errorCode == ERROR_FILE)
         {
             printf("Error file");
+            freeTable(table);
             return ERROR_FILE;
         }
 
         printf("Error memory");
+        freeTable(table);
         return ERROR_MEMORY;
     }
 
     printTable(table);
-    printf("\nDuty cycle: %lf\n", dutyCycle(table));
+    printf("\nLoad factor: %lf\n", loadFactor(table));
     printf("Average length: %f\n", averageLength(table));
     printf("Max length: %d", maxLength(table));
     freeTable(table);

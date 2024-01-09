@@ -6,14 +6,17 @@
 
 typedef struct Table Table;
 
-// Hash-function, that returns num from 0 to size of hash
-size_t hashFunction(const char* const key);
+// hash function
+size_t hashFunction(const char* const key, const size_t size);
+
+//add size table
+void sizeTable(Table* const table, const size_t size);
 
 // Add word into hash table
-Table* makeTable(Table* const table, const char* const word, int* const errorCode);
+Table* addWord(Table* const table, const char* const word, int* const errorCode, const size_t size);
 
 // return load factor
-double dutyCycle(const Table* const table);
+double loadFactor(const Table* const table);
 
 // return average length of lists
 double averageLength(const Table* const table);
@@ -26,3 +29,6 @@ void printTable(const Table* const table);
 
 //delete hash table
 void freeTable(Table* const table);
+
+//check string number 
+bool checkTable(Table* const table, const size_t rightResult);

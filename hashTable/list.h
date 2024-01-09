@@ -18,13 +18,16 @@ void printList(const List* const list);
 bool checkNodes(const List* const list, const char* const key);
 
 // delete list
-List* deleteList(List* list);
+void deleteList(List* const list);
 
 // return data of node
-int data(const Node* const list);
+int count(const Node* const list);
 
 // return length of node
 size_t length(const List* const list);
 
 // change data of node
-void newData(List* list);
+void newData(List* list, const char* const word);
+
+//check string of the list
+size_t checkList(List* const list);

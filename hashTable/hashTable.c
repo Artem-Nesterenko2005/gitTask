@@ -10,10 +10,11 @@
 typedef struct Table
 {
     size_t quantity;
-    List* hashes[NUMBER];
+    List** hashes;
+    size_t size;
 } Table;
 
-size_t hashFunction(const char* const key)
+size_t hashFunction(const char* const key, const size_t size)
 {
     size_t result = 0;
     size_t length = strlen(key);
@@ -21,10 +22,15 @@ size_t hashFunction(const char* const key)
     {
         result = key[i] + result * NUMBER / 10;
     }
-    return result % NUMBER;
+    return result % size;
 }
 
-Table* makeTable(Table* table, const char* const word, int* const errorCode)
+void sizeTable(Table* const table, const size_t size)
+{
+    table->size = size;
+}
+
+Table* addWord(Table* table, const char* const word, int* const errorCode, const size_t size)
 {
     if (table == NULL)
     {
@@ -34,8 +40,15 @@ Table* makeTable(Table* table, const char* const word, int* const errorCode)
             *errorCode = ERROR_MEMORY;
             return NULL;
         }
+        sizeTable(table, size);
+        table->hashes = (List**)calloc(table->size, sizeof(List*));
+        if (table->hashes == NULL)
+        {
+            *errorCode = ERROR_MEMORY;
+            return NULL;
+        }
     }
-    const int hashWord = hashFunction(word);
+    const int hashWord = hashFunction(word, table->size);
     if (table->hashes[hashWord] == NULL)
     {
         ++table->quantity;
@@ -58,17 +71,17 @@ Table* makeTable(Table* table, const char* const word, int* const errorCode)
         return table;
     }
 
-    newData(table->hashes[hashWord]);
+    newData(table->hashes[hashWord], word);
     return table;
 }
 
-double dutyCycle(const Table* const table)
+double loadFactor(const Table* const table)
 {
     if (table == NULL)
     {
         return 0;
     }
-    return (double)table->quantity / NUMBER;
+    return (double)table->quantity / table->size;
 }
 
 double averageLength(const Table* const table)
@@ -77,18 +90,18 @@ double averageLength(const Table* const table)
     {
         return;
     }
-    size_t numberList = 0;
-    size_t numberNode = 0;
-    for (size_t i = 0; i < NUMBER; ++i)
+    size_t numberLists = 0;
+    size_t numberNodes = 0;
+    for (size_t i = 0; i < table->size; ++i)
     {
         if (table->hashes[i] == NULL)
         {
             continue;
         }
-        ++numberList;
-        numberNode += length(table->hashes[i]);
+        ++numberLists;
+        numberNodes += length(table->hashes[i]);
     }
-    return numberNode / (double)numberList;
+    return numberLists == 0 ? 0 : numberNodes / (double)numberLists;
 }
 
 int maxLength(const Table* const table)
@@ -98,7 +111,7 @@ int maxLength(const Table* const table)
         return 0;
     }
     int tableLength = 0;
-    for (size_t i = 0; i < NUMBER; ++i)
+    for (size_t i = 0; i < table->size; ++i)
     {
         if (table->hashes[i] == NULL)
         {
@@ -117,7 +130,7 @@ void printTable(const Table* const table)
         return;
     }
 
-    for (size_t i = 0; i < NUMBER; ++i)
+    for (size_t i = 0; i < table->size; ++i)
     {
         if (table->hashes[i] == NULL)
         {
@@ -133,12 +146,29 @@ void freeTable(Table* table)
     {
         return;
     }
-    for (size_t i = 0; i < NUMBER; ++i)
+    for (size_t i = 0; i < table->size; ++i)
     {
         if (table->hashes[i] == NULL)
         {
+            free(table->hashes[i]);
             continue;
         }
-        table->hashes[i] = deleteList(table->hashes[i]);
+        deleteList(table->hashes[i]);
+        free(table->hashes[i]);
     }
+    free(table);
+}
+
+bool checkTable(Table* const table, const size_t rightResult)
+{
+    size_t result = 0;
+    for (size_t i = 0; i < table->size; ++i)
+    {
+        if (table->hashes[i] != NULL)
+        {
+            result += checkList(table->hashes[i]);
+        }
+    }
+
+    return result == rightResult;
 }
