@@ -10,7 +10,7 @@ int main(void)
 {
     if (!test())
     {
-       printf("Error test");
+        printf("Error test");
         return ERROR_TEST;
     }
     int* const errorCode = OK_CODE;
@@ -42,15 +42,18 @@ int main(void)
     const int result = numberOccurence(string, subString, &errorCode);
     if (errorCode != OK_CODE)
     {
+        free(string);
         printf("Memory error");
         return MEMORY_ERROR;
     }
 
     if (result == NO_SUBSTRING)
     {
+        free(string);
         printf("No substring");
         return OK_CODE;
     }
     printf("Position of the first occurrence of the substring: %d - %Iu", result, result + strlen(subString));
+    free(string);
     return OK_CODE;
 }

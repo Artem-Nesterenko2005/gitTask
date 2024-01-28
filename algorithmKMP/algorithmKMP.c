@@ -6,7 +6,7 @@
 #include "algorithmKMP.h"
 #include "errorCodes.h"
 
-int* prefixFunction(const char* const string, int* const errorCode)
+static int* prefixFunction(const char* const string, int* const errorCode)
 {
     const size_t length = strlen(string);
     int* array = (int*)calloc(length, sizeof(int));
@@ -47,6 +47,7 @@ int numberOccurence(const char* const string, const char* const subString, int* 
                 ++counter;
                 if (counter == lengthSubString)
                 {
+                    free(array);
                     return i;
                 }
             }
