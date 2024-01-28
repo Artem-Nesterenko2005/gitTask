@@ -58,14 +58,17 @@ Table* workWithFile(const int* const fileName, int* const errorCode, const size_
     if (file == NULL)
     {
         *errorCode = ERROR_FILE;
-        if (file != NULL)
-        {
-            fclose(file);
-        }
+        fclose(file);
         return NULL;
     }
     Table* table = NULL;
     char* string = NULL;
+    table = createHashTable(table, size, errorCode);
+    if (*errorCode != OK_CODE)
+    {
+        fclose(file);
+        return table;
+    }
     while (!feof(file))
     {
         string = readString(errorCode, file);
@@ -74,14 +77,13 @@ Table* workWithFile(const int* const fileName, int* const errorCode, const size_
             fclose(file);
             return table;
         }
-        table = addWord(table, string, errorCode, size);
+        table = addWord(table, string, errorCode);
         if (*errorCode != OK_CODE)
         {
             fclose(file);
-            return NULL;
+            return table;
         }
     }
-
     fclose(file);
     return table;
 }

@@ -14,7 +14,7 @@ typedef struct Table
     size_t size;
 } Table;
 
-size_t hashFunction(const char* const key, const size_t size)
+static size_t hashFunction(const char* const key, const size_t size)
 {
     size_t result = 0;
     size_t length = strlen(key);
@@ -25,38 +25,30 @@ size_t hashFunction(const char* const key, const size_t size)
     return result % size;
 }
 
-void sizeTable(Table* const table, const size_t size)
+Table* createHashTable(Table* table, const int size, int* const errorCode)
 {
-    table->size = size;
-}
-
-Table* addWord(Table* table, const char* const word, int* const errorCode, const size_t size)
-{
+    table = (Table*)calloc(1, sizeof(Table));
     if (table == NULL)
     {
-        table = (Table*)calloc(1, sizeof(Table));
-        if (table == NULL)
-        {
-            *errorCode = ERROR_MEMORY;
-            return NULL;
-        }
-        sizeTable(table, size);
-        table->hashes = (List**)calloc(table->size, sizeof(List*));
-        if (table->hashes == NULL)
-        {
-            *errorCode = ERROR_MEMORY;
-            return NULL;
-        }
+        *errorCode = ERROR_MEMORY;
+        return NULL;
     }
+    table->size = size;
+    table->hashes = (List**)calloc(table->size, sizeof(List*));
+    if (table->hashes == NULL)
+    {
+        *errorCode = ERROR_MEMORY;
+    }
+    return table;
+}
+
+Table* addWord(Table* table, const char* const word, int* const errorCode)
+{
     const int hashWord = hashFunction(word, table->size);
     if (table->hashes[hashWord] == NULL)
     {
         ++table->quantity;
         table->hashes[hashWord] = addData(table->hashes[hashWord], word, errorCode);
-        if (*errorCode != OK_CODE)
-        {
-            return NULL;
-        }
         return table;
     }
 
@@ -64,10 +56,6 @@ Table* addWord(Table* table, const char* const word, int* const errorCode, const
     {
         ++table->quantity;
         table->hashes[hashWord] = addData(table->hashes[hashWord], word, errorCode);
-        if (*errorCode != OK_CODE)
-        {
-            return NULL;
-        }
         return table;
     }
 
@@ -150,7 +138,6 @@ void freeTable(Table* table)
     {
         if (table->hashes[i] == NULL)
         {
-            free(table->hashes[i]);
             continue;
         }
         deleteList(table->hashes[i]);

@@ -9,17 +9,17 @@
 
 #define START_NUMBER 1
 
-typedef struct Node
+struct Node
 {
     char* key;
     int count;
-    Node* next;
+    struct Node* next;
 } Node;
 
 typedef struct List
 {
-    Node* head;
-    Node* tail;
+    struct Node* head;
+    struct Node* tail;
     size_t length;
 } List;
 
@@ -34,7 +34,7 @@ List* addData(List* list, const char* const key, int* const errorCode)
             return NULL;
         }
     }
-    Node* node = calloc(1, sizeof(Node));
+    struct Node* node = calloc(1, sizeof(Node));
     if (node == NULL)
     {
         *errorCode = ERROR_MEMORY;
@@ -56,7 +56,7 @@ List* addData(List* list, const char* const key, int* const errorCode)
 
 void printList(const List* const list)
 {
-    Node* node = list->head;
+    struct Node* node = list->head;
     while (node != NULL)
     { 
         printf("%s - %d\n", node->key, node->count);
@@ -66,7 +66,7 @@ void printList(const List* const list)
 
 bool checkNodes(const List* const list, const char* const key)
 {
-    Node* node = list->head;
+    struct Node* node = list->head;
     while (node != NULL && strcmp(node->key, key) != 0)
     {
         node = node->next;
@@ -78,14 +78,14 @@ void deleteList(List* const list)
 {
     while (list->head != NULL)
     {
-        Node* node = list->head;
+        struct Node* node = list->head;
         list->head = node->next;
         free(node->key);
         free(node);
     }
 }
 
-int count(const Node* const list)
+int count(const struct Node* const list)
 {
     return list->count;
 }
@@ -110,7 +110,7 @@ size_t checkList(List* const list)
     while (list->head != NULL)
     {
         result += list->head->count;
-        Node* node = list->head;
+        struct Node* node = list->head;
         list->head = node->next;
     }
     return result;

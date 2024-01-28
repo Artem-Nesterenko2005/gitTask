@@ -11,6 +11,12 @@ static bool randomStringsTest(void)
 {
     Table* table = NULL;
     int* const errorCode = OK_CODE;
+    table = createHashTable(table, 200, &errorCode);
+    if (errorCode != OK_CODE)
+    {
+        freeTable(table);
+        return false;
+    }
     srand(time(NULL));
     double startTick = clock();
     for (size_t i = 0; i < 100000; ++i)
@@ -18,6 +24,7 @@ static bool randomStringsTest(void)
         char* word = (char*)malloc(10 * sizeof(char));
         if (word == NULL)
         {
+            freeTable(table);
             return false;
         }
 
@@ -40,7 +47,7 @@ static bool randomStringsTest(void)
 bool test(void)
 {
     const int* const errorCode = OK_CODE;
-    Table* table = workWithFile("test.txt", &errorCode, 5);
+    Table* table =  workWithFile("test.txt", &errorCode, 5);
     const bool result = checkTable(table, 4) && errorCode == OK_CODE;
     freeTable(table);
 

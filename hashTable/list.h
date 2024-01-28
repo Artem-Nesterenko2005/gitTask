@@ -3,7 +3,7 @@
 #include <stdbool.h>
 
 // struct for node
-typedef struct Node Node;
+struct Node;
 
 // struct for list
 typedef struct List List;
@@ -20,14 +20,11 @@ bool checkNodes(const List* const list, const char* const key);
 // delete list
 void deleteList(List* const list);
 
-// return data of node
-int count(const Node* const list);
-
 // return length of node
 size_t length(const List* const list);
 
 // change data of node
 void newData(List* list, const char* const word);
 
-//check string of the list
+// check string of the list
 size_t checkList(List* const list);
