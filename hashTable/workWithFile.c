@@ -63,7 +63,7 @@ Table* workWithFile(const int* const fileName, int* const errorCode, const size_
     }
     Table* table = NULL;
     char* string = NULL;
-    table = createHashTable(table, size, errorCode);
+    table = createHashTable(size, errorCode);
     if (*errorCode != OK_CODE)
     {
         fclose(file);

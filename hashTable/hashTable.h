@@ -8,7 +8,7 @@
 typedef struct Table Table;
 
 // create hash table
-Table* createHashTable(Table* table, const int size, int* const errorCode);
+Table* createHashTable(const int size, int* const errorCode);
 
 // add word into hash table
 Table* addWord(Table* const table, const char* const word, int* const errorCode);

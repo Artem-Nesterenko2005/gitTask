@@ -25,9 +25,9 @@ static size_t hashFunction(const char* const key, const size_t size)
     return result % size;
 }
 
-Table* createHashTable(Table* table, const int size, int* const errorCode)
+Table* createHashTable(const int size, int* const errorCode)
 {
-    table = (Table*)calloc(1, sizeof(Table));
+    Table* table = (Table*)calloc(1, sizeof(Table));
     if (table == NULL)
     {
         *errorCode = ERROR_MEMORY;
@@ -45,16 +45,16 @@ Table* createHashTable(Table* table, const int size, int* const errorCode)
 Table* addWord(Table* table, const char* const word, int* const errorCode)
 {
     const int hashWord = hashFunction(word, table->size);
+    ++table->quantity;
+
     if (table->hashes[hashWord] == NULL)
     {
-        ++table->quantity;
         table->hashes[hashWord] = addData(table->hashes[hashWord], word, errorCode);
         return table;
     }
 
     if (checkNodes(table->hashes[hashWord], word))
     {
-        ++table->quantity;
         table->hashes[hashWord] = addData(table->hashes[hashWord], word, errorCode);
         return table;
     }

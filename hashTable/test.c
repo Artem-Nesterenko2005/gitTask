@@ -11,7 +11,7 @@ static bool randomStringsTest(void)
 {
     Table* table = NULL;
     int* const errorCode = OK_CODE;
-    table = createHashTable(table, 200, &errorCode);
+    table = createHashTable(200, &errorCode);
     if (errorCode != OK_CODE)
     {
         freeTable(table);
@@ -35,6 +35,7 @@ static bool randomStringsTest(void)
         table = addWord(table, word, &errorCode, 200);
         if (errorCode != OK_CODE)
         {
+            freeTable(table);
             return false;
         }
     }
