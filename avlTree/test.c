@@ -29,5 +29,6 @@ bool test(void)
         return false;
     }
 
+    deleteTree(tree);
     return true;
 }

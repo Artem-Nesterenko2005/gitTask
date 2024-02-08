@@ -25,7 +25,7 @@ static void updateBalance(Tree* node)
 {
     int leftBalance = checkBalance(node->leftChild);
     int rightBalance = checkBalance(node->rightChild);
-    node->balance = ((leftBalance > rightBalance) ? leftBalance : rightBalance) + 1;
+    node->balance = (leftBalance > rightBalance ? leftBalance : rightBalance) + 1;
 }
 
 static int balance(Tree* node)
@@ -214,7 +214,7 @@ bool keyExiste(Tree* tree, char* key)
     return searchData(tree, key) != NULL;
 }
 
-static Tree* newNode(const Tree* tree)
+static Tree* newNode(Tree* tree)
 {
     tree = tree->rightChild;
     while (tree->leftChild != NULL && tree != NULL)
@@ -224,8 +224,12 @@ static Tree* newNode(const Tree* tree)
     return tree;
 }
 
-static void deleteNode(Tree* tree, const char* const key)
+static Tree* deleteNode(Tree* tree, const char* const key)
 {
+    if (tree == NULL)
+    {
+        return tree;
+    }
     if (strcmp(key, tree->key) == 0)
     {
         if (tree->rightChild != NULL && tree->leftChild != NULL)
@@ -234,7 +238,7 @@ static void deleteNode(Tree* tree, const char* const key)
             tree->key = helpNode->key;
             tree->data = helpNode->data;
             deleteNode(helpNode, helpNode->key);
-            return;
+            return tree;
         }
         if (tree->rightChild == NULL)
         {
@@ -242,14 +246,23 @@ static void deleteNode(Tree* tree, const char* const key)
             {
                 tree->leftChild->parent = tree->parent;
             }
-            if (strcmp(key, tree->parent->key) < 0)
+            if (tree->parent == NULL && tree->leftChild != NULL)
+            {
+                tree->leftChild->parent = NULL;
+            }
+            else if (tree->parent != NULL && strcmp(key, tree->parent->key) < 0)
             {
                 tree->parent->leftChild = tree->leftChild;
             }
-            else
+            else if (tree->parent != NULL)
             {
                 tree->parent->rightChild = tree->leftChild;
             }
+            Tree* newTree = tree->leftChild;
+            free(tree->data);
+            free(tree->key);
+            free(tree);
+            return newTree;
         }
         else
         {
@@ -257,7 +270,11 @@ static void deleteNode(Tree* tree, const char* const key)
             {
                 tree->rightChild->parent = tree->parent;
             }
-            if (strcmp(key, tree->parent->key) < 0)
+            if (tree->parent == NULL)
+            {
+                tree->rightChild->parent = NULL;
+            }
+            else if (strcmp(key, tree->parent->key) < 0)
             {
                 tree->parent->leftChild = tree->rightChild;
             }
@@ -265,9 +282,15 @@ static void deleteNode(Tree* tree, const char* const key)
             {
                 tree->parent->rightChild = tree->rightChild;
             }
+            Tree* newTree = tree->rightChild;
+            free(tree->data);
+            free(tree->key);
+            free(tree);
+            return newTree;
+            
         }
         free(tree);
-        return;
+        return tree;
     }
     strcmp(key, tree->key) < 0 ? deleteNode(tree->leftChild, key) : deleteNode(tree->rightChild, key);
     if (tree->parent != NULL)
@@ -275,20 +298,23 @@ static void deleteNode(Tree* tree, const char* const key)
         if (strcmp(tree->key, tree->parent->key) < 0)
         {
             tree->parent->leftChild = createBalance(tree);
-            return;
+            return tree;
         }
         tree->parent->rightChild = createBalance(tree);
     }
+    return tree;
 }
 
-void deleteData(Tree* tree, const char* const key)
+
+Tree* deleteData(Tree* tree, const char* const key)
 {
     if (tree == NULL)
     {
-        return;
+        return tree;
     }
-    deleteNode(tree, key);
+    tree = deleteNode(tree, key);
     tree = createBalance(tree);
+    return tree;
 }
 
 void deleteTree(Tree* tree)

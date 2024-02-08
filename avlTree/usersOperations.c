@@ -74,7 +74,7 @@ Tree* usersOperations(const size_t numberOperation, int* const errorCode, const 
         {
             break;
         }
-        deleteData(tree, key);
+        tree = deleteData(tree, key);
         free(key);
         break;
 

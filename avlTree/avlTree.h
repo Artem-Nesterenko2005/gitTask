@@ -15,7 +15,7 @@ char* searchData(Tree* tree, char* key);
 bool keyExiste(Tree* tree, char* key);
 
 // delete node
-void deleteData(Tree* tree, const char* const key);
+Tree* deleteData(Tree* tree, const char* const key);
 
 // delete tree
 void deleteTree(Tree* tree);
