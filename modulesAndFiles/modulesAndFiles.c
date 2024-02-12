@@ -7,9 +7,9 @@
 #include "errorCodes.h"
 #include "modulesAndFiles.h"
 
-char* readFile(int* const errorCode, const char* const fileName)
+int* readFile(int* const errorCode, char* fileName, int* lengthArray)
 {
-    size_t length = 0;
+    int length = 0;
     size_t capacity = 1;
     FILE* file = NULL;
     fopen_s(&file, fileName, "r");
@@ -18,77 +18,45 @@ char* readFile(int* const errorCode, const char* const fileName)
         return ERROR_FILE;
     }
 
-    char* string = (char*)malloc(sizeof(char));
-    if (string == NULL)
+    int* array = (int*)malloc(sizeof(int));
+    if (array == NULL)
     {
         fclose(file);
         *errorCode = ERROR_MEMORY;
         return NULL;
     }
-    char symbol = getc(file);
+    int symbol = 0;
+    fscanf_s(file, "%d", &symbol);
 
-    while (symbol != EOF)
+    while (!feof(file))
     {
-        string[length++] = symbol;
+        array[length++] = symbol;
 
         if (length >= capacity)
         {
             capacity *= 2;
-            char* tmp = (char*)realloc(string, capacity * sizeof(char));
+            int* tmp = (int*)realloc(array, capacity * sizeof(int));
             if (tmp == NULL)
             {
-                free(string);
+                free(array);
                 fclose(file);
-                *errorCode = ERROR_MEMORY;
-                return NULL;
-            }
-            string = tmp;
-        }
-
-        symbol = getc(file);
-    }
-
-    *errorCode = OK_CODE;
-    string[length] = '\0';
-    fclose(file);
-    return string;
-}
-
-int* fillingArray(char* string, size_t* const length, int* const errorCode)
-{
-    int* array = (int*)malloc(sizeof(int));
-    size_t capacity = 1;
-    for (size_t i = 0; *string != '\0'; ++i)
-    {
-        if (*length >= capacity)
-        {
-            capacity *= 2;
-            char* tmp = (int*)realloc(array, capacity * sizeof(int));
-            if (tmp == NULL)
-            {
                 *errorCode = ERROR_MEMORY;
                 return NULL;
             }
             array = tmp;
         }
-        ++*length;
-        array[i] = atoi(string);
-        while (*string != ' ')
-        {
-            ++string;
-        }
 
-        while (*string == ' ')
-        {
-            ++string;
-        }
+        fscanf_s(file, "%d", &symbol);
     }
-    array[*length] = '\0';
 
+    *errorCode = OK_CODE;
+    array[length] = '\0';
+    fclose(file);
+    *lengthArray = length;
     return array;
 }
 
-size_t mostCommon(int* const array, const size_t length)
+size_t mostCommon(const int* array, const size_t length)
 {
     size_t mostCommon = 0;
     size_t counterMostCommon = 1;
@@ -105,7 +73,7 @@ size_t mostCommon(int* const array, const size_t length)
     return mostCommon;
 }
 
-void printArray(const int* const array, const size_t const length)
+void printArray(const int* const array, const size_t length)
 {
     for (size_t i = 0; i < length; ++i)
     {

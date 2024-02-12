@@ -1,15 +1,15 @@
 #include <stdlib.h>
 
-int* quickSort(int* const array, const size_t firstLimitation, const size_t secondLimitation)
+int* quickSort(int* const array, const int firstLimitation, const int secondLimitation)
 {
     if (firstLimitation > secondLimitation)
     {
         return array;
     }
 
-    size_t largeIndex = firstLimitation;
-    size_t lowIndex = secondLimitation;
-    size_t elementForComparison = array[(secondLimitation + firstLimitation) / 2];
+    int largeIndex = firstLimitation;
+    int lowIndex = secondLimitation;
+    int elementForComparison = array[(secondLimitation + firstLimitation) / 2];
 
     while (largeIndex <= lowIndex)
     {
@@ -23,7 +23,7 @@ int* quickSort(int* const array, const size_t firstLimitation, const size_t seco
         }
         if (largeIndex <= lowIndex)
         {
-            const size_t swapVariablesCounter = array[largeIndex];
+            const int swapVariablesCounter = array[largeIndex];
             array[largeIndex] = array[lowIndex];
             array[lowIndex] = swapVariablesCounter;
             --lowIndex;

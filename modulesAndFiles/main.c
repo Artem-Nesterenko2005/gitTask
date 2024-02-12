@@ -14,8 +14,9 @@ int main(void)
         return ERROR_TEST;
     }
 
-    const int* const errorCode = OK_CODE;
-    const char* const string = readFile(&errorCode, "file.txt");
+    int errorCode = OK_CODE;
+    int length = 0;
+    int* array = readFile(&errorCode, "file.txt", &length);
     if (errorCode != OK_CODE)
     {
         if (errorCode == ERROR_MEMORY)
@@ -27,22 +28,13 @@ int main(void)
         printf("Error file");
         return ERROR_FILE;
     }
-
-    const size_t length = 0;
-    const int* array = fillingArray(string, &length, &errorCode);
-    if (errorCode != OK_CODE)
-    {
-        free(string);
-        free(array);
-        printf("Error memory");
-        return ERROR_MEMORY;
-    }
+    
     printf("Array: ");
     printArray(array, length);
     array = quickSort(array, 0, length);
 
     printf("\nMost common element - %Iu\n", mostCommon(array, length));
-    free(string);
     free(array);
     return OK_CODE;
+    
 }

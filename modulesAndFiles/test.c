@@ -6,7 +6,7 @@
 #include "errorCodes.h"
 #include "test.h"
 
-static bool checkSort(const int* const array, const int length)
+static bool checkSort(const int* array, const int length)
 {
     for (size_t i = 0; i < length; ++i)
     {
@@ -20,15 +20,14 @@ static bool checkSort(const int* const array, const int length)
 
 bool test(void)
 {
-    const int* const errorCode = OK_CODE;
-    const char* const string = readFile(&errorCode, "test.txt");
+    int errorCode = OK_CODE;
+    int length = 0;
+    const int* array = readFile(&errorCode, "test.txt", &length);
     if (errorCode != OK_CODE)
     {
         return false;
     }
 
-    const int length = 0;
-    const int* array = fillingArray(string, &length, &errorCode);
     if (errorCode != OK_CODE)
     {
         return false;
@@ -36,7 +35,6 @@ bool test(void)
 
     array = quickSort(array, 0, length);
     const bool result = checkSort(array, length) && mostCommon(array, length) == 2;
-    free(string);
     free(array);
     return result;
 }
