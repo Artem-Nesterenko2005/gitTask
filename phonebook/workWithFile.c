@@ -5,6 +5,7 @@
 
 #include "errorCode.h"
 #include "workWithFile.h"
+#include "phonebook.h"
 
 #define BY_NAME -2
 #define LIMITATION 100
@@ -79,60 +80,26 @@ void printPhonebook(Phonebook* phonebook)
     }
 }
 
-static char* readFile(int* const errorCode, FILE* file)
+Phonebook* workWithFile(FILE* file, int* errorCode)
 {
-    size_t length = 0;
-    size_t capacity = 1;
-    char* string = (char*)malloc(sizeof(char));
-    if (string == NULL)
-    {
-        *errorCode = ERROR_MEMORY;
-        return NULL;
-    }
-    char symbol = getc(file);
-
-    if (symbol == EOF)
-    {
-        free(string);
-        return NULL;
-    }
-
-    while (symbol != '\n' && symbol != ' ')
-    {
-        string[length++] = symbol;
-
-        if (length >= capacity)
-        {
-            capacity *= 2;
-            char* tmp = (char*)realloc(string, capacity * sizeof(char));
-            if (tmp == NULL)
-            {
-                free(string);
-                *errorCode = ERROR_MEMORY;
-                return NULL;
-            }
-            string = tmp;
-        }
-
-        symbol = getc(file);
-    }
-
-    *errorCode = OK_CODE;
-    string[length] = '\0';
-    return string;
-}
-
-Phonebook* workWithFile(Phonebook* phonebook, FILE* file, int* errorCode)
-{
+    Phonebook* phonebook = NULL;
     while (!feof(file))
     {
-        char* name = readFile(errorCode, file);
-        if (name == NULL)
+        char* name = readString(errorCode, file);
+        if (name == NULL || *errorCode != OK_CODE)
         {
-            break;
+            return phonebook;
         }
-        char* dash = readFile(errorCode, file);
-        char* number = readFile(errorCode, file);
+        char* dash = readString(errorCode, file);
+        if (*errorCode != OK_CODE)
+        {
+            return phonebook;
+        }
+        char* number = readString(errorCode, file);
+        if (*errorCode != OK_CODE)
+        {
+            return phonebook;
+        }
         phonebook = addData(phonebook, name, number, errorCode);
         if (phonebook->number >= LIMITATION)
         {
@@ -142,7 +109,7 @@ Phonebook* workWithFile(Phonebook* phonebook, FILE* file, int* errorCode)
     return phonebook;
 }
 
-void findBy(Phonebook* phonebook, char* string, int userSelection)
+char* findBy(Phonebook* phonebook, char* string, int userSelection)
 {
     if (userSelection == BY_NAME)
     {
@@ -151,14 +118,11 @@ void findBy(Phonebook* phonebook, char* string, int userSelection)
         {
             node = node->next;
         }
-
         if (node == NULL)
         {
-            printf("No contact with that name\n");
-            return;
+            return NULL;
         }
-        printf("%s - %s\n", node->name, node->number);
-        return;
+        return node->number;
     }
 
     Node* node = phonebook->head;
@@ -166,13 +130,11 @@ void findBy(Phonebook* phonebook, char* string, int userSelection)
     {
         node = node->next;
     }
-
     if (node == NULL)
     {
-        printf("No contact with that number\n");
-        return;
+        return NULL;
     }
-    printf("%s - %s\n", node->name, node->number);
+    return node->name;
 }
 
 void delete(Phonebook* phonebook)
@@ -191,6 +153,7 @@ void delete(Phonebook* phonebook)
         free(trash);
     }
     free(phonebook);
+    phonebook = NULL;
 }
 
 void saveData(Phonebook* newData, Phonebook* phonebook, FILE* file)

@@ -8,17 +8,17 @@ typedef struct Node Node;
 // struct for phonebook
 typedef struct Phonebook Phonebook;
 
-// add data in phonebook
+// add data in phonebook, the function takes ownership of the passed pointers and will delete them when the phonebook is deleted
 Phonebook* addData(Phonebook* phonebook, char* name, char* number, int* errorCode);
 
 // print phonebook
 void printPhonebook(Phonebook* phonebook);
 
 // read files data
-Phonebook* workWithFile(Phonebook* phonebook, FILE* file, int* errorCode);
+Phonebook* workWithFile(FILE* file, int* errorCode);
 
 // find data by name or by number
-void findBy(Phonebook* phonebook, char* string, const int userSelection);
+char* findBy(Phonebook* phonebook, char* string, int userSelection);
 
 // delete phonebook
 void delete(Phonebook* phonebook);

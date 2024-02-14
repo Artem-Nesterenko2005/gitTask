@@ -1,9 +1,12 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 #include "workWithFile.h"
 #include "errorCode.h"
+#include "phonebook.h"
+
 
 bool test(void)
 {
@@ -19,8 +22,9 @@ bool test(void)
     phonebook = NULL;
     FILE* file = NULL;
     fopen_s(&file, "test.txt", "r");
-    phonebook = workWithFile(phonebook, file, &errorCode);
-    if (errorCode != OK_CODE || !checkPhonebook(phonebook))
+    phonebook = workWithFile(file, &errorCode);
+    if (errorCode != OK_CODE || !checkPhonebook(phonebook) || 
+        strcmp(findBy(phonebook, "2", byNumber), "b") != 0 || strcmp(findBy(phonebook, "a", byName), "1") != 0)
     {
         if (file != NULL)
         {

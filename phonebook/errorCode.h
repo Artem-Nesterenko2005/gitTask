@@ -1,6 +1,6 @@
 #pragma once
 
-enum errorCodes
+enum ErrorCodes
 {
     OK_CODE,
     ERROR_MEMORY,

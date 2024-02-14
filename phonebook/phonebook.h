@@ -14,5 +14,8 @@ enum userSelection
     save
 };
 
-// users comands
-Phonebook* phonebookComand(int userSelection, int* errorCode, FILE* file, Phonebook** newData, Phonebook* phonebook);
+// read user string or file string
+char* readString(int* errorCode, FILE* file);
+
+// users commands
+Phonebook* phonebookCommand(int userSelection, int* errorCode, FILE* file, Phonebook** newData, Phonebook* phonebook);

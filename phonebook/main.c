@@ -18,19 +18,23 @@ int main(void)
     int errorCode = OK_CODE;
     Phonebook* phonebook = NULL;
     Phonebook* newData = NULL;
-    phonebook = workWithFile(phonebook, file, &errorCode);
+    phonebook = workWithFile(file, &errorCode);
+    if (file != NULL)
+    {
+        fclose(file);
+    }
     int userSelection = 1;
     while (userSelection != exits && errorCode == OK_CODE)
     {
         printf("\n0 - Exit\n");
-        printf("1 - create new records(name and phonenumber)\n");
+        printf("1 - create new records (name and phone number)\n");
         printf("2 - print all existing records\n");
         printf("3 - find phone by name\n");
         printf("4 - find name by phone\n");
         printf("5 - save data\n");
         printf("Choose operation ");
         scanf_s("%d", &userSelection);
-        phonebook = phonebookComand(userSelection, &errorCode, file, &newData, phonebook);
+        phonebook = phonebookCommand(userSelection, &errorCode, file, &newData, phonebook);
     }
     delete(phonebook);
     delete(newData);
