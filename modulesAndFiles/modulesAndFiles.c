@@ -15,7 +15,8 @@ int* readFile(int* const errorCode, char* fileName, int* lengthArray)
     fopen_s(&file, fileName, "r");
     if (file == NULL)
     {
-        return ERROR_FILE;
+        *errorCode = ERROR_FILE;
+        return NULL;
     }
 
     int* array = (int*)malloc(sizeof(int));

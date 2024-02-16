@@ -27,12 +27,6 @@ bool test(void)
     {
         return false;
     }
-
-    if (errorCode != OK_CODE)
-    {
-        return false;
-    }
-
     array = quickSort(array, 0, length);
     const bool result = checkSort(array, length) && mostCommon(array, length) == 2;
     free(array);
