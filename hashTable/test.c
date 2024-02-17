@@ -10,7 +10,7 @@
 static bool randomStringsTest(void)
 {
     Table* table = NULL;
-    int* const errorCode = OK_CODE;
+    int errorCode = OK_CODE;
     table = createHashTable(200, &errorCode);
     if (errorCode != OK_CODE)
     {
@@ -32,7 +32,7 @@ static bool randomStringsTest(void)
         {
             word[j] = rand() % 10000;
         }
-        table = addWord(table, word, &errorCode, 200);
+        table = addWord(table, word, &errorCode);
         if (errorCode != OK_CODE)
         {
             freeTable(table);
@@ -47,7 +47,7 @@ static bool randomStringsTest(void)
 
 bool test(void)
 {
-    const int* const errorCode = OK_CODE;
+    int errorCode = OK_CODE;
     Table* table =  workWithFile("test.txt", &errorCode, 5);
     const bool result = checkTable(table, 4) && errorCode == OK_CODE;
     freeTable(table);

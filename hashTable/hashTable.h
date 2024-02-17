@@ -8,10 +8,10 @@
 typedef struct Table Table;
 
 // create hash table
-Table* createHashTable(const int size, int* const errorCode);
+Table* createHashTable(const size_t size, int* errorCode);
 
 // add word into hash table
-Table* addWord(Table* const table, const char* const word, int* const errorCode);
+Table* addWord(Table* const table, char* word, int* errorCode);
 
 // return load factor
 double loadFactor(const Table* const table);
@@ -20,7 +20,7 @@ double loadFactor(const Table* const table);
 double averageLength(const Table* const table);
 
 // return maximum length of lists
-int maxLength(const Table* const table);
+size_t maxLength(const Table* const table);
 
 // print hash table
 void printTable(const Table* const table);

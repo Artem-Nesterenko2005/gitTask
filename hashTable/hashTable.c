@@ -25,7 +25,7 @@ static size_t hashFunction(const char* const key, const size_t size)
     return result % size;
 }
 
-Table* createHashTable(const int size, int* const errorCode)
+Table* createHashTable(const size_t size, int* const errorCode)
 {
     Table* table = (Table*)calloc(1, sizeof(Table));
     if (table == NULL)
@@ -42,9 +42,9 @@ Table* createHashTable(const int size, int* const errorCode)
     return table;
 }
 
-Table* addWord(Table* table, const char* const word, int* const errorCode)
+Table* addWord(Table* table, char* word, int* const errorCode)
 {
-    const int hashWord = hashFunction(word, table->size);
+    const size_t hashWord = hashFunction(word, table->size);
     ++table->quantity;
 
     if (table->hashes[hashWord] == NULL)
@@ -76,7 +76,7 @@ double averageLength(const Table* const table)
 {
     if (table == NULL)
     {
-        return;
+        return 0;
     }
     size_t numberLists = 0;
     size_t numberNodes = 0;
@@ -92,13 +92,13 @@ double averageLength(const Table* const table)
     return numberLists == 0 ? 0 : numberNodes / (double)numberLists;
 }
 
-int maxLength(const Table* const table)
+size_t maxLength(const Table* const table)
 {
     if (table == NULL)
     {
         return 0;
     }
-    int tableLength = 0;
+    size_t tableLength = 0;
     for (size_t i = 0; i < table->size; ++i)
     {
         if (table->hashes[i] == NULL)
@@ -136,6 +136,7 @@ void freeTable(Table* table)
     }
     for (size_t i = 0; i < table->size; ++i)
     {
+        table->hashes[i] = 0;
         if (table->hashes[i] == NULL)
         {
             continue;

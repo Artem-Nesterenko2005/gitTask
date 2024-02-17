@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "HashTable.h"
+#include "hashTable.h"
 #include "errorCodes.h"
 #include "test.h"
 #include "workWithFile.h"
@@ -14,7 +14,7 @@ int main(void)
         return ERROR_TEST;
     }
 
-    const int* const errorCode = OK_CODE;
+    int errorCode = OK_CODE;
     Table* table = workWithFile("file.txt", &errorCode, 174);
     if (errorCode != OK_CODE)
     {
@@ -33,7 +33,7 @@ int main(void)
     printTable(table);
     printf("\nLoad factor: %lf\n", loadFactor(table));
     printf("Average length: %f\n", averageLength(table));
-    printf("Max length: %d", maxLength(table));
+    printf("Max length: %Iu", maxLength(table));
     freeTable(table);
     return OK_CODE;
 }

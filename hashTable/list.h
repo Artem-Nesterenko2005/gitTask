@@ -9,7 +9,7 @@ struct Node;
 typedef struct List List;
 
 // add data for node 
-List* addData(List* const list, const char* const key, int* const errorCode);
+List* addData(List* const list, char* key, int* errorCode);
 
 // print list
 void printList(const List* const list);

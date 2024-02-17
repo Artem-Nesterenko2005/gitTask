@@ -23,7 +23,7 @@ typedef struct List
     size_t length;
 } List;
 
-List* addData(List* list, const char* const key, int* const errorCode)
+List* addData(List* list, char* key, int* const errorCode)
 {
     if (list == NULL)
     {
@@ -79,6 +79,7 @@ void deleteList(List* const list)
     while (list->head != NULL)
     {
         struct Node* node = list->head;
+        node->next = NULL;
         list->head = node->next;
         free(node->key);
         free(node);

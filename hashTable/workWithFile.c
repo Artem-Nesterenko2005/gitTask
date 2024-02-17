@@ -5,7 +5,7 @@
 #include "errorCodes.h"
 #include "hashTable.h"
 
-static char* readString(int* const errorCode, const FILE* file)
+static char* readString(int* const errorCode, FILE* file)
 {
     size_t length = 0;
     size_t capacity = 1;
@@ -51,14 +51,13 @@ static char* readString(int* const errorCode, const FILE* file)
     return string;
 }
 
-Table* workWithFile(const int* const fileName, int* const errorCode, const size_t size)
+Table* workWithFile(const char* const fileName, int* errorCode, const size_t size)
 {
     FILE* file = NULL;
     fopen_s(&file, fileName, "r");
     if (file == NULL)
     {
         *errorCode = ERROR_FILE;
-        fclose(file);
         return NULL;
     }
     Table* table = NULL;
