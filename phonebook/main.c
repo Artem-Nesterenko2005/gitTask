@@ -34,14 +34,10 @@ int main(void)
         printf("5 - save data\n");
         printf("Choose operation ");
         scanf_s("%d", &userSelection);
-        phonebook = phonebookCommand(userSelection, &errorCode, file, &newData, phonebook);
+        phonebook = phonebookCommand(userSelection, &errorCode, "phonebook.txt", &newData, phonebook);
     }
-    delete(phonebook);
-    delete(newData);
-    if (file != NULL)
-    {
-        fclose(file);
-    }
+    delete(&phonebook);
+    delete(&newData);
     if (errorCode == ERROR_MEMORY)
     {
         printf("Error memory");

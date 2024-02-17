@@ -93,11 +93,14 @@ Phonebook* workWithFile(FILE* file, int* errorCode)
         char* dash = readString(errorCode, file);
         if (*errorCode != OK_CODE)
         {
+            free(name);
             return phonebook;
         }
         char* number = readString(errorCode, file);
         if (*errorCode != OK_CODE)
         {
+            free(name);
+            free(dash);
             return phonebook;
         }
         phonebook = addData(phonebook, name, number, errorCode);
@@ -109,7 +112,7 @@ Phonebook* workWithFile(FILE* file, int* errorCode)
     return phonebook;
 }
 
-char* findBy(Phonebook* phonebook, char* string, int userSelection)
+char* findBy(Phonebook* phonebook, char* string, enum UserSelection userSelection)
 {
     if (userSelection == BY_NAME)
     {
@@ -137,13 +140,13 @@ char* findBy(Phonebook* phonebook, char* string, int userSelection)
     return node->name;
 }
 
-void delete(Phonebook* phonebook)
+void delete(Phonebook** phonebook)
 {
-    if (phonebook == NULL)
+    if (*phonebook == NULL)
     {
         return;
     }
-    Node* node = phonebook->head;
+    Node* node = (*phonebook)->head;
     while (node)
     {
         free(node->name);
@@ -152,8 +155,8 @@ void delete(Phonebook* phonebook)
         node = node->next;
         free(trash);
     }
-    free(phonebook);
-    phonebook = NULL;
+    free(*phonebook);
+    *phonebook = NULL;
 }
 
 void saveData(Phonebook* newData, Phonebook* phonebook, FILE* file)
@@ -175,12 +178,6 @@ void saveData(Phonebook* newData, Phonebook* phonebook, FILE* file)
         fprintf(&(*file), "%s - %s\n", node->name, node->number);
         node = node->next;
     }
-    delete(phonebook);
+    delete(&phonebook);
     free(newData);
-}
-
-bool checkPhonebook(Phonebook* phonebook)
-{
-    return (strcmp(phonebook->head->name, "a") == 0 && strcmp(phonebook->head->number, "1") == 0
-        && strcmp(phonebook->tail->name, "b") == 0 && strcmp(phonebook->tail->number, "2") == 0 && phonebook->number == 2);
 }

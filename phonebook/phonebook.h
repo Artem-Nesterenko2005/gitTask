@@ -2,7 +2,7 @@
 
 #include "workWithFile.h"
 
-enum userSelection
+enum UserSelection
 {
     byName = -2,
     byNumber,
@@ -18,4 +18,4 @@ enum userSelection
 char* readString(int* errorCode, FILE* file);
 
 // users commands
-Phonebook* phonebookCommand(int userSelection, int* errorCode, FILE* file, Phonebook** newData, Phonebook* phonebook);
+Phonebook* phonebookCommand(int userSelection, int* errorCode, char* fileName, Phonebook** newData, Phonebook* phonebook);

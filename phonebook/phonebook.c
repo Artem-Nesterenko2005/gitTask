@@ -57,7 +57,7 @@ char* readString(int* errorCode, FILE* file)
     return string;
 }
 
-Phonebook* phonebookCommand(int userSelection, int* errorCode, FILE* file, Phonebook** newData, Phonebook* phonebook)
+Phonebook* phonebookCommand(int userSelection, int* errorCode, char* fileName, Phonebook** newData, Phonebook* phonebook)
 {
     switch (userSelection)
     {
@@ -72,7 +72,7 @@ Phonebook* phonebookCommand(int userSelection, int* errorCode, FILE* file, Phone
         char* name = readString(errorCode, stdin);
         if (*errorCode != OK_CODE)
         {
-            delete(*newData);
+            delete(newData);
             return phonebook;
         }
         printf("Enter number of new contact ");
@@ -80,10 +80,14 @@ Phonebook* phonebookCommand(int userSelection, int* errorCode, FILE* file, Phone
         if (*errorCode != OK_CODE)
         {
             free(name);
-            delete(*newData);
+            delete(newData);
             return phonebook;
         }
         *newData = addData(*newData, name, number, errorCode);
+        if (*errorCode != OK_CODE)
+        {
+            delete(newData);
+        }
         break;
     }
 
@@ -133,13 +137,14 @@ Phonebook* phonebookCommand(int userSelection, int* errorCode, FILE* file, Phone
 
     case save:
     {
-        fopen_s(file, "phonebook.txt", "a");
+        FILE* file = NULL;
+        fopen_s(&file, fileName, "a");
         saveData(*newData, phonebook, file);
         if (file != NULL)
         {
             fclose(file);
         }
-        fopen_s(file, "phonebook.txt", "r");
+        fopen_s(&file, fileName, "r");
         *newData = NULL;
         phonebook = NULL;
         phonebook = workWithFile(file, errorCode);

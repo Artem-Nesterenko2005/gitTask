@@ -7,35 +7,47 @@
 #include "errorCode.h"
 #include "phonebook.h"
 
-
-bool test(void)
+static bool test1(void)
 {
-    Phonebook* phonebook = NULL;
     int errorCode = OK_CODE;
-    phonebook = addData(phonebook, "a", "1", &errorCode);
-    phonebook = addData(phonebook, "b", "2", &errorCode);
-    if (errorCode != OK_CODE || !checkPhonebook(phonebook))
-    {
-        return false;
-    }
-    free(phonebook);
-    phonebook = NULL;
+    Phonebook* phonebook = NULL;
     FILE* file = NULL;
-    fopen_s(&file, "test.txt", "r");
+    fopen_s(&file, "test1.txt", "r");
     phonebook = workWithFile(file, &errorCode);
-    if (errorCode != OK_CODE || !checkPhonebook(phonebook) || 
-        strcmp(findBy(phonebook, "2", byNumber), "b") != 0 || strcmp(findBy(phonebook, "a", byName), "1") != 0)
-    {
-        if (file != NULL)
-        {
-            fclose(file);
-        }
-        return false;
-    }
     if (file != NULL)
     {
         fclose(file);
     }
-    delete(phonebook);
+    if (errorCode != OK_CODE || strcmp(findBy(phonebook, "1", byNumber), "a") != 0 || strcmp(findBy(phonebook, "b", byName), "2") != 0)
+    {
+        delete(&phonebook);
+        return false;
+    }
+    delete(&phonebook);
     return true;
+}
+
+static bool test2(void)
+{
+    int errorCode = OK_CODE;
+    Phonebook* phonebook = NULL;
+    FILE* file = NULL;
+    fopen_s(&file, "test2.txt", "r");
+    phonebook = workWithFile(file, &errorCode);
+    if (file != NULL)
+    {
+        fclose(file);
+    }
+    if (errorCode != OK_CODE || strcmp(findBy(phonebook, "9230", byNumber), "gok") != 0 || strcmp(findBy(phonebook, "lof", byName), "123") != 0)
+    {
+        delete(&phonebook);
+        return false;
+    }
+    delete(&phonebook);
+    return true;
+}
+
+bool test(void)
+{
+    return test1() && test2();
 }

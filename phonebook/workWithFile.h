@@ -18,13 +18,10 @@ void printPhonebook(Phonebook* phonebook);
 Phonebook* workWithFile(FILE* file, int* errorCode);
 
 // find data by name or by number
-char* findBy(Phonebook* phonebook, char* string, int userSelection);
+char* findBy(Phonebook* phonebook, char* string, enum UserSelection userSelection);
 
 // delete phonebook
-void delete(Phonebook* phonebook);
+void delete(Phonebook** phonebook);
 
 // save new data
 void saveData(Phonebook* newData, Phonebook* phonebook, FILE* file);
-
-// check phonebook for test
-bool checkPhonebook(Phonebook* phonebook);
