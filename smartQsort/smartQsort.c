@@ -1,39 +1,38 @@
-﻿#include <stdio.h>
+﻿include <stdio.h>
 #include <time.h>
 #include <stdbool.h>
+#include <stdlib.h>
 
 #define LIMITATION_FOR_ARRAY 100
 #define LIMITATION_TEST_ARRAY 10
 #define RANDOM_RANGE 200
 #define DIFFERENCE_FOR_SORTING 10
-#define END_OF_SORTING 1
 #define ERROR_TESTS -1
 #define OK_CODE 0
 
-static int insertionSort(int* const array, const int length)
+static void insertionSort(int* const array, const int length)
 {
-    for (size_t i = 1; i < length; ++i)
+    for (int i = 1; i < length; ++i)
     {
-        const size_t variables = i;
-        while (i > 0)
+        const int variables = i;
+        for (int j = i; j > 0; --j)
         {
-            if (array[i] < array[i - 1])
+            if (array[j] < array[j - 1])
             {
-                int swapSymbols = array[i];
-                array[i] = array[i - 1];
-                array[i - 1] = swapSymbols;
+                int swapSymbols = array[j];
+                array[j] = array[j - 1];
+                array[j - 1] = swapSymbols;
             }
-            --i;
         }
         i = variables;
     }
 }
 
-static int qsorting(int* const array, const int firstLimitation, const int secondLimitation)
+static void qsorting(int* const array, const int firstLimitation, const int secondLimitation)
 {
     if (firstLimitation > secondLimitation)
     {
-        return END_OF_SORTING;
+        return;
     }
     if (secondLimitation - firstLimitation < DIFFERENCE_FOR_SORTING)
     {
@@ -113,7 +112,7 @@ static bool test(void)
     return true;
 }
 
-static void randomiser(int* const array, int length)
+static void randomize(int* const array, int length)
 {
     srand(time(NULL));
     for (size_t i = 0; i < length; ++i)
@@ -139,7 +138,7 @@ int main(void)
     }
     int array[LIMITATION_FOR_ARRAY] = { 0 };
     printf("\nSource array: ");
-    randomiser(array, LIMITATION_FOR_ARRAY);
+    randomize(array, LIMITATION_FOR_ARRAY);
     printArray(array);
     qsorting(array, 0, LIMITATION_FOR_ARRAY - 1);
     printf("\n\nSorted array: ");
