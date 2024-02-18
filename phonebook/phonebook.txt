@@ -1,4 +1,7 @@
 abs - 123
-mkvs - 40321
-kfeof - 03921
-apsad - 20239
+loa - 990
+mvb - 03933
+cos - 03
+sin - 04
+ctg - 02
+tg - 01

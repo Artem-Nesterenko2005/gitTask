@@ -128,15 +128,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.c" />
-    <ClCompile Include="phonebook.c" />
+    <ClCompile Include="phonebookUi.c" />
     <ClCompile Include="test.c" />
-    <ClCompile Include="workWithFile.c" />
+    <ClCompile Include="phonebook.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="errorCode.h" />
-    <ClInclude Include="phonebook.h" />
+    <ClInclude Include="phonebookUi.h" />
     <ClInclude Include="test.h" />
-    <ClInclude Include="workWithFile.h" />
+    <ClInclude Include="phonebook.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

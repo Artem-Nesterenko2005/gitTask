@@ -1,21 +1,30 @@
 #pragma once
 
-#include "workWithFile.h"
+#include <stdbool.h>
 
-enum UserSelection
-{
-    byName = -2,
-    byNumber,
-    exits,
-    createNew,
-    printAll,
-    findByNames,
-    findByPhones,
-    save
-};
+// struct for node
+typedef struct Node Node;
 
-// read user string or file string
-char* readString(int* errorCode, FILE* file);
+// struct for phonebook
+typedef struct Phonebook Phonebook;
 
-// users commands
-Phonebook* phonebookCommand(int userSelection, int* errorCode, char* fileName, Phonebook** newData, Phonebook* phonebook);
+// add data in phonebook, the function takes ownership of the passed pointers and will delete them when the phonebook is deleted
+Phonebook* addData(Phonebook* phonebook, char* name, char* number, int* errorCode);
+
+// print phonebook
+void printPhonebook(Phonebook* phonebook);
+
+// read files data
+Phonebook* load(FILE* file, int* errorCode);
+
+// find data by name or by number
+char* findBy(Phonebook* phonebook, char* string, enum UserSelection userSelection);
+
+// delete phonebook
+void delete(Phonebook** phonebook);
+
+// save new data
+void saveData(Phonebook** phonebook, FILE* file);
+
+// check number of contact
+bool checkLimitation(Phonebook* phonebook);

@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "phonebookUi.h"
 #include "phonebook.h"
-#include "workWithFile.h"
 #include "errorCode.h"
 #include "test.h"
 
@@ -17,8 +17,7 @@ int main(void)
     fopen_s(&file, "phonebook.txt", "r");
     int errorCode = OK_CODE;
     Phonebook* phonebook = NULL;
-    Phonebook* newData = NULL;
-    phonebook = workWithFile(file, &errorCode);
+    phonebook = load(file, &errorCode);
     if (file != NULL)
     {
         fclose(file);
@@ -34,10 +33,9 @@ int main(void)
         printf("5 - save data\n");
         printf("Choose operation ");
         scanf_s("%d", &userSelection);
-        phonebook = phonebookCommand(userSelection, &errorCode, "phonebook.txt", &newData, phonebook);
+        phonebook = phonebookCommand(userSelection, &errorCode, "phonebook.txt", phonebook);
     }
     delete(&phonebook);
-    delete(&newData);
     if (errorCode == ERROR_MEMORY)
     {
         printf("Error memory");

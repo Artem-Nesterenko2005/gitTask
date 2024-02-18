@@ -1,164 +1,183 @@
-﻿#include <stdio.h>
-#include <string.h>
-#include <malloc.h>
 #include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <stdbool.h>
 
 #include "errorCode.h"
-#include "workWithFile.h"
 #include "phonebook.h"
+#include "phonebookUi.h"
 
-char* readString(int* errorCode, FILE* file)
+#define BY_NAME -2
+#define LIMITATION 100
+
+typedef struct Node
 {
-    size_t length = 0;
-    size_t capacity = 1;
-    char* string = (char*)malloc(sizeof(char));
-    if (string == NULL)
-    {
-        *errorCode = ERROR_MEMORY;
-        return NULL;
-    }
+    char* name;
+    char* number;
+    struct Node* next;
+} Node;
 
-    char symbol = 0;
-    char trash = getc(file);
-    if (trash == '\n')
-    {
-        symbol = getc(file);
-    }
-    else
-    {
-        symbol = trash;
-    }
-
-    while (symbol != EOF)
-    {
-        string[length++] = symbol;
-
-        if (length >= capacity)
-        {
-            capacity *= 2;
-            char* tmp = (char*)realloc(string, capacity * sizeof(char));
-            if (tmp == NULL)
-            {
-                free(string);
-                *errorCode = ERROR_MEMORY;
-                return NULL;
-            }
-            string = tmp;
-        }
-        symbol = getc(file);
-        if (symbol == '\n' || symbol == ' ')
-        {
-            break;
-        }
-    }
-
-    *errorCode = OK_CODE;
-    string[length] = '\0';
-    return string;
-}
-
-Phonebook* phonebookCommand(int userSelection, int* errorCode, char* fileName, Phonebook** newData, Phonebook* phonebook)
+typedef struct Phonebook
 {
-    switch (userSelection)
-    {
-    case exits:
-    {
-        break;
-    }
+    Node* head;
+    Node* tail;
+    size_t number;
+} Phonebook;
 
-    case createNew:
+Phonebook* addData(Phonebook* phonebook, char* name, char* number, int* const errorCode)
+{
+    if (phonebook == NULL)
     {
-        printf("Enter name of new contact ");
-        char* name = readString(errorCode, stdin);
-        if (*errorCode != OK_CODE)
+        phonebook = (Phonebook*)calloc(1, sizeof(Phonebook));
+        if (phonebook == NULL)
         {
-            delete(newData);
+            *errorCode = ERROR_MEMORY;
             return phonebook;
         }
-        printf("Enter number of new contact ");
-        char* number = readString(errorCode, stdin);
-        if (*errorCode != OK_CODE)
+
+        phonebook->head = (Node*)calloc(1, sizeof(Node));
+        if (phonebook->head == NULL)
         {
-            free(name);
-            delete(newData);
+            *errorCode = ERROR_MEMORY;
             return phonebook;
         }
-        *newData = addData(*newData, name, number, errorCode);
-        if (*errorCode != OK_CODE)
-        {
-            delete(newData);
-        }
-        break;
-    }
 
-    case printAll:
-    {
-        printPhonebook(phonebook);
-        break;
-    }
-
-    case findByNames:
-    {
-        printf("Enter name ");
-        char* name = readString(errorCode, stdin);
-        if (*errorCode != OK_CODE)
+        phonebook->tail = (Node*)calloc(1, sizeof(Node));
+        if (phonebook->tail == NULL)
         {
+            *errorCode = ERROR_MEMORY;
             return phonebook;
         }
-        char* result = findBy(phonebook, name, byName);
-        if (result == NULL)
-        {
-            printf("No contact with that name\n");
-            break;
-        }
-        printf("%s - %s\n", name, result);
-        free(name);
-        break;
-    }
 
-    case findByPhones:
-    {
-        printf("Enter number ");
-        char* number = readString(errorCode, stdin);
-        if (*errorCode != OK_CODE)
-        {
-            return phonebook;
-        }
-        char* result = findBy(phonebook, number, byNumber);
-        if (result == NULL)
-        {
-            printf("No contact with that number\n");
-            break;
-        }
-        printf("%s - %s\n", number, result);
-        free(number);
-        break;
-    }
-
-    case save:
-    {
-        FILE* file = NULL;
-        fopen_s(&file, fileName, "a");
-        saveData(*newData, phonebook, file);
-        if (file != NULL)
-        {
-            fclose(file);
-        }
-        fopen_s(&file, fileName, "r");
-        *newData = NULL;
-        phonebook = NULL;
-        phonebook = workWithFile(file, errorCode);
-        if (file != NULL)
-        {
-            fclose(file);
-        }
+        phonebook->head->name = name;
+        phonebook->head->number = number;
+        phonebook->tail = phonebook->head;
+        ++phonebook->number;
         return phonebook;
     }
 
-    default:
+    phonebook->tail->next = (Node*)calloc(1, sizeof(Node));
+    if (phonebook->tail->next == NULL)
     {
-        printf("There is no comand with this number\n");
+        *errorCode = ERROR_MEMORY;
+        return phonebook;
     }
+
+    phonebook->tail->next->name = name;
+    phonebook->tail->next->number = number;
+    phonebook->tail = phonebook->tail->next;
+    ++phonebook->number;
+    return phonebook;
+}
+
+void printPhonebook(Phonebook* phonebook)
+{
+    Node* printBook = phonebook->head;
+    while (printBook != NULL)
+    {
+        printf("%s - %s\n", printBook->name, printBook->number);
+        printBook = printBook->next;
+    }
+}
+
+Phonebook* load(FILE* file, int* errorCode)
+{
+    Phonebook* phonebook = NULL;
+    while (!feof(file))
+    {
+        char* name = readString(errorCode, file);
+        if (name == NULL || *errorCode != OK_CODE)
+        {
+            if (*errorCode == EMPTY_STRING)
+            {
+                *errorCode = OK_CODE;
+            }
+            return phonebook;
+        }
+        char* dash = readString(errorCode, file);
+        if (*errorCode != OK_CODE)
+        {
+            free(name);
+            return phonebook;
+        }
+        char* number = readString(errorCode, file);
+        if (*errorCode != OK_CODE)
+        {
+            free(name);
+            free(dash);
+            return phonebook;
+        }
+        phonebook = addData(phonebook, name, number, errorCode);
+        if (*errorCode != OK_CODE)
+        {
+            free(name);
+            free(dash);
+            free(number);
+            break;
+        }
     }
     return phonebook;
+}
+
+char* findBy(Phonebook* phonebook, char* string, enum UserSelection userSelection)
+{
+    if (userSelection == BY_NAME)
+    {
+        Node* node = phonebook->head;
+        while (node != NULL && strcmp(node->name, string) != 0)
+        {
+            node = node->next;
+        }
+        if (node == NULL)
+        {
+            return NULL;
+        }
+        return node->number;
+    }
+
+    Node* node = phonebook->head;
+    while (node != NULL && strcmp(node->number, string) != 0)
+    {
+        node = node->next;
+    }
+    if (node == NULL)
+    {
+        return NULL;
+    }
+    return node->name;
+}
+
+void delete(Phonebook** phonebook)
+{
+    if (*phonebook == NULL)
+    {
+        return;
+    }
+    Node* node = (*phonebook)->head;
+    while (node)
+    {
+        free(node->name);
+        free(node->number);
+        Node* trash = node;
+        node = node->next;
+        free(trash);
+    }
+    free(*phonebook);
+    *phonebook = NULL;
+}
+
+void saveData(Phonebook** phonebook, FILE* file)
+{
+    Node* node = (*phonebook)->head;
+    while (node != NULL)
+    {
+        fprintf(&(*file), "%s - %s\n", node->name, node->number);
+        node = node->next;
+    }
+    delete(phonebook);
+}
+
+bool checkLimitation(Phonebook* phonebook)
+{
+    return phonebook->number <= LIMITATION;
 }

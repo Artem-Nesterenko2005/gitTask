@@ -4,5 +4,6 @@ enum ErrorCodes
 {
     OK_CODE,
     ERROR_MEMORY,
-    ERROR_TEST
+    ERROR_TEST,
+    EMPTY_STRING,
 };

@@ -3,9 +3,9 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "workWithFile.h"
-#include "errorCode.h"
 #include "phonebook.h"
+#include "errorCode.h"
+#include "phonebookUi.h"
 
 static bool test1(void)
 {
@@ -13,7 +13,7 @@ static bool test1(void)
     Phonebook* phonebook = NULL;
     FILE* file = NULL;
     fopen_s(&file, "test1.txt", "r");
-    phonebook = workWithFile(file, &errorCode);
+    phonebook = load(file, &errorCode);
     if (file != NULL)
     {
         fclose(file);
@@ -33,7 +33,7 @@ static bool test2(void)
     Phonebook* phonebook = NULL;
     FILE* file = NULL;
     fopen_s(&file, "test2.txt", "r");
-    phonebook = workWithFile(file, &errorCode);
+    phonebook = load(file, &errorCode);
     if (file != NULL)
     {
         fclose(file);
