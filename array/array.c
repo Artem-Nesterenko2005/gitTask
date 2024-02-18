@@ -16,7 +16,7 @@ static void flipArray(int* array, int leftLimitation, int rightLimitation)
     }
 }
 
-static void fillingArray(int* array, int length)
+static void fillArray(int* array, int length)
 {
     for (int i = 0; i < length; ++i)
     {
@@ -47,11 +47,12 @@ int main(void)
     {
         return MEMORY_ERROR;
     }
-    fillingArray(array, firstLength + secondLength);
+    fillArray(array, firstLength + secondLength);
     flipArray(array, 0, firstLength - 1);
     flipArray(array, firstLength, firstLength + secondLength - 1);
     flipArray(array, 0, firstLength + secondLength - 1);
     printf("Inverted array: ");
     printArray(array, firstLength + secondLength);
+    free(array);
     return OK_CODE;
 }
