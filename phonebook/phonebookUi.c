@@ -65,7 +65,7 @@ char* readString(int* errorCode, FILE* file)
     return string;
 }
 
-Phonebook* phonebookCommand(int userSelection, int* errorCode, char* fileName, Phonebook* phonebook)
+Phonebook* phonebookCommand(enum UserSelection userSelection, int* errorCode, char* fileName, Phonebook* phonebook)
 {
     switch (userSelection)
     {
@@ -148,6 +148,10 @@ Phonebook* phonebookCommand(int userSelection, int* errorCode, char* fileName, P
 
     case save:
     {
+        if (phonebook == NULL)
+        {
+            return phonebook;
+        }
         if (!checkLimitation(phonebook))
         {
             printf("Not enough space, 100 records limit exceeded\n");
@@ -155,13 +159,12 @@ Phonebook* phonebookCommand(int userSelection, int* errorCode, char* fileName, P
         }
         FILE* file = NULL;
         fopen_s(&file, fileName, "w");
-        saveData(&phonebook, file);
-        if (file != NULL)
+        if (file == NULL)
         {
-            fclose(file);
+            *errorCode = ERROR_FILE;
+            return phonebook;
         }
-        fopen_s(&file, fileName, "r");
-        phonebook = load(file, errorCode);
+        saveData(&phonebook, file);
         if (file != NULL)
         {
             fclose(file);
@@ -171,7 +174,7 @@ Phonebook* phonebookCommand(int userSelection, int* errorCode, char* fileName, P
 
     default:
     {
-        printf("There is no comand with this number\n");
+        printf("There is no command with this number\n");
     }
     }
     return phonebook;

@@ -7,13 +7,16 @@
 #include "errorCode.h"
 #include "phonebookUi.h"
 
-static bool test1(void)
+static bool testFile1(void)
 {
     int errorCode = OK_CODE;
-    Phonebook* phonebook = NULL;
     FILE* file = NULL;
     fopen_s(&file, "test1.txt", "r");
-    phonebook = load(file, &errorCode);
+    Phonebook* phonebook = load(file, &errorCode);
+    if (errorCode != OK_CODE)
+    {
+        return false;
+    }
     if (file != NULL)
     {
         fclose(file);
@@ -27,20 +30,23 @@ static bool test1(void)
     return true;
 }
 
-static bool test2(void)
+static bool testFile2(void)
 {
     int errorCode = OK_CODE;
-    Phonebook* phonebook = NULL;
     FILE* file = NULL;
     fopen_s(&file, "test2.txt", "r");
-    phonebook = load(file, &errorCode);
+    Phonebook* phonebook = load(file, &errorCode);
+    if (errorCode != OK_CODE)
+    {
+        delete(&phonebook);
+        return false;
+    }
     if (file != NULL)
     {
         fclose(file);
     }
     if (errorCode != OK_CODE || strcmp(findBy(phonebook, "9230", byNumber), "gok") != 0 || strcmp(findBy(phonebook, "lof", byName), "123") != 0)
     {
-        delete(&phonebook);
         return false;
     }
     delete(&phonebook);
@@ -49,5 +55,5 @@ static bool test2(void)
 
 bool test(void)
 {
-    return test1() && test2();
+    return testFile1() && testFile2();
 }

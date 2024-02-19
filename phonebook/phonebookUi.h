@@ -18,4 +18,4 @@ enum UserSelection
 char* readString(int* errorCode, FILE* file);
 
 // users commands
-Phonebook* phonebookCommand(int userSelection, int* errorCode, char* fileName, Phonebook* phonebook);
+Phonebook* phonebookCommand(enum UserSelection userSelection, int* errorCode, char* fileName, Phonebook* phonebook);

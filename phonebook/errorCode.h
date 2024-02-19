@@ -6,4 +6,5 @@ enum ErrorCodes
     ERROR_MEMORY,
     ERROR_TEST,
     EMPTY_STRING,
+    ERROR_FILE
 };

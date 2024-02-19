@@ -16,13 +16,12 @@ int main(void)
     FILE* file = NULL;
     fopen_s(&file, "phonebook.txt", "r");
     int errorCode = OK_CODE;
-    Phonebook* phonebook = NULL;
-    phonebook = load(file, &errorCode);
+    Phonebook* phonebook = load(file, &errorCode);
     if (file != NULL)
     {
         fclose(file);
     }
-    int userSelection = 1;
+    enum UserSelection userSelection = printAll;
     while (userSelection != exits && errorCode == OK_CODE)
     {
         printf("\n0 - Exit\n");
@@ -40,6 +39,12 @@ int main(void)
     {
         printf("Error memory");
         return ERROR_MEMORY;
+    }
+
+    if (errorCode == ERROR_FILE)
+    {
+        printf("Error file");
+        return ERROR_FILE;
     }
 
     return OK_CODE;

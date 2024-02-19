@@ -1,7 +1,2 @@
-abs - 123
-loa - 990
-mvb - 03933
-cos - 03
-sin - 04
-ctg - 02
-tg - 01
+poq - 213
+aaa - 555

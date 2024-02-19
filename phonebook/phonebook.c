@@ -7,7 +7,6 @@
 #include "phonebook.h"
 #include "phonebookUi.h"
 
-#define BY_NAME -2
 #define LIMITATION 100
 
 typedef struct Node
@@ -42,13 +41,6 @@ Phonebook* addData(Phonebook* phonebook, char* name, char* number, int* const er
             return phonebook;
         }
 
-        phonebook->tail = (Node*)calloc(1, sizeof(Node));
-        if (phonebook->tail == NULL)
-        {
-            *errorCode = ERROR_MEMORY;
-            return phonebook;
-        }
-
         phonebook->head->name = name;
         phonebook->head->number = number;
         phonebook->tail = phonebook->head;
@@ -72,6 +64,10 @@ Phonebook* addData(Phonebook* phonebook, char* name, char* number, int* const er
 
 void printPhonebook(Phonebook* phonebook)
 {
+    if (phonebook == NULL)
+    {
+        return;
+    }
     Node* printBook = phonebook->head;
     while (printBook != NULL)
     {
@@ -82,6 +78,11 @@ void printPhonebook(Phonebook* phonebook)
 
 Phonebook* load(FILE* file, int* errorCode)
 {
+    if (file == NULL)
+    {
+        *errorCode = ERROR_FILE;
+        return NULL;
+    }
     Phonebook* phonebook = NULL;
     while (!feof(file))
     {
@@ -121,7 +122,11 @@ Phonebook* load(FILE* file, int* errorCode)
 
 char* findBy(Phonebook* phonebook, char* string, enum UserSelection userSelection)
 {
-    if (userSelection == BY_NAME)
+    if (phonebook == NULL)
+    {
+        return NULL;
+    }
+    if (userSelection == byName)
     {
         Node* node = phonebook->head;
         while (node != NULL && strcmp(node->name, string) != 0)
@@ -168,13 +173,16 @@ void delete(Phonebook** phonebook)
 
 void saveData(Phonebook** phonebook, FILE* file)
 {
+    if (*phonebook == NULL)
+    {
+        return;
+    }
     Node* node = (*phonebook)->head;
     while (node != NULL)
     {
-        fprintf(&(*file), "%s - %s\n", node->name, node->number);
+        fprintf(file, "%s - %s\n", node->name, node->number);
         node = node->next;
     }
-    delete(phonebook);
 }
 
 bool checkLimitation(Phonebook* phonebook)
