@@ -15,6 +15,7 @@ static bool testFile1(void)
     Phonebook* phonebook = load(file, &errorCode);
     if (errorCode != OK_CODE)
     {
+        delete(&phonebook);
         return false;
     }
     if (file != NULL)
@@ -47,6 +48,7 @@ static bool testFile2(void)
     }
     if (errorCode != OK_CODE || strcmp(findBy(phonebook, "9230", byNumber), "gok") != 0 || strcmp(findBy(phonebook, "lof", byName), "123") != 0)
     {
+        delete(&phonebook);
         return false;
     }
     delete(&phonebook);
