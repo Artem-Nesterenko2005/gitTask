@@ -7,124 +7,75 @@
 #include "tree.h"
 #include "parseTree.h"
 #include "errorCodes.h"
+#include "readString.h"
 
-#define ENCODING_NUMBER 48
-
-enum operations
+static Tree* addSymbol(Tree* tree, char* data, int* errorCode)
 {
-    MULTIPLICATION = -6,
-    ADDITION,
-    SUBTRACTION = -3,
-    DIVISION = -1
-};
-
-static Tree* addSymbol(Tree* tree, char data, int* const errorCode)
-{
-    switch (data)
+    switch (*data)
     {
     case '+':
     case '-':
     case '/':
     case '*':
-        tree = addParent(tree, data - ENCODING_NUMBER, errorCode);
-        if (*errorCode != OK_CODE)
-        {
-            return NULL;
-        }
+        tree = addParent(tree, data[0], errorCode);
+        free(data);
         return tree;
 
     case ')':
-        tree = parent(tree);
+        if (parentNode(parentNode(tree)) != NULL)
+        {
+            tree = parent(tree);
+        }
+        free(data);
         return tree;
 
     case ' ':
     case '(':
+        free(data);
         return tree;
 
     default:
-        if (!isdigit(data))
+        if (!isdigit(*data))
         {
             *errorCode = UNCORRECT_SYMBOL;
-            return NULL;
+            return tree;
         }
 
-        tree = addData(tree, data - ENCODING_NUMBER, errorCode);
-        if (*errorCode != OK_CODE)
-        {
-            return NULL;
-        }
+        tree = addData(tree, atoi(data), errorCode);
+        free(data);
         return tree;
     }
 }
 
-Tree* makeTree(const char* const string, int* const errorCode)
+Tree* makeTree(char* filename, int* errorCode)
 {
+    FILE* file = NULL;
+    fopen_s(&file, filename, "r");
+    if (file == NULL)
+    {
+        *errorCode = ERROR_FILE;
+        return NULL;
+    }
     Tree* tree = NULL;
-    const char* const digit = NULL;
-    size_t lengthString = strlen(string);
-    if (lengthString == 0)
+    tree = makeNode();
+    if (tree == NULL)
     {
-        *errorCode = EMPTY_FILE;
+        *errorCode = ERROR_MEMORY;
         return NULL;
     }
 
-    tree = makeNode(tree);
-    if (*errorCode != OK_CODE || tree == NULL)
+    while (!feof(file))
     {
-        return NULL;
-    }
-
-    for (size_t i = 0; i < lengthString - 2; ++i)
-    {
-        tree = addSymbol(tree, string[i], errorCode);
+        char* string = readString(errorCode, file);
         if (*errorCode != OK_CODE)
         {
-            return NULL;
+            return tree;
+        }
+        tree = addSymbol(tree, string, errorCode);
+        if (*errorCode != OK_CODE)
+        {
+            return tree;
         }
     }
     return tree;
-}
-
-int resultCalculation(Tree* tree, int* const errorCode)
-{
-    if (leftChildren(tree) == NULL)
-    {
-        return data(tree);
-    }
-    const int number1 = resultCalculation(leftChildren(tree), errorCode);
-    const int number2 = resultCalculation(rightChildren(tree), errorCode);
-    const char operation = data(tree);
-    
-    switch (operation)
-    {
-    case MULTIPLICATION:
-        if (*errorCode != OK_CODE)
-        {
-            return 0;
-        }
-        return number1 * number2;
-    
-    case ADDITION:
-        if (*errorCode != OK_CODE)
-        {
-            return 0;
-        }
-        return number1 + number2;
-
-    case DIVISION:
-        if (number2 == 0 || *errorCode != OK_CODE)
-        {
-            *errorCode = ZERO_DIVISOR;
-            return 0;
-        }
-        return number1 / number2;
-        
-    case SUBTRACTION:
-        if (*errorCode != OK_CODE)
-        {
-            return 0;
-        }
-        return number1 - number2;
-    }
-
 }

@@ -10,23 +10,26 @@
 bool testParseTree(void)
 {
     Tree* tree = NULL;
-    const int* const errorCode = OK_CODE;
-    const char* const string = readString(&errorCode, "testFile.txt");
+    int errorCode = OK_CODE;
+    tree = makeNode();
     if (errorCode != OK_CODE)
     {
         return false;
     }
 
-    tree = makeTree(string, &errorCode);
+    tree = makeTree("testFile.txt", &errorCode);
     if (errorCode != OK_CODE)
     {
+        clearTree(tree);
         return false;
     }
 
     if (resultCalculation(tree, &errorCode) != 9 || errorCode != OK_CODE)
     {
+        clearTree(tree);
         return false;
     }
 
+    clearTree(tree);
     return true;
 }

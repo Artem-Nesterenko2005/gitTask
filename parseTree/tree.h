@@ -1,22 +1,19 @@
 #pragma once
 
-//operation
-enum operation;
-
 //struct for tree
 typedef struct Tree Tree;
 
 //create root of tree
-Tree* makeNode(int* const errorCode);
+Tree* makeNode(void);
 
 //add numbers
-Tree* addData(Tree* tree, const int data, int* const errorCode);
+Tree* addData(Tree* tree, const int data, int* errorCode);
 
 //return to parent
 Tree* parent(const Tree* const tree);
 
 //add operation
-Tree* addParent(Tree* tree, const int data, int* const errorCode);
+Tree* addParent(Tree* tree, char data, int* errorCode);
 
 //clear tree nodes
 void clearTree(Tree* tree);
@@ -24,17 +21,17 @@ void clearTree(Tree* tree);
 //print tree
 void printTree(const Tree* const tree);
 
-//return left children of node
-Tree* leftChildren(const Tree* const tree);
+// calculates the result of an expression by traversing the tree
+int resultCalculation(Tree* tree, int* const errorCode);
 
-//return right children of node
-Tree* rightChildren(const Tree* const tree);
+// return right child of node
+Tree* rightChildren(Tree* tree);
 
-//return data of node
-int data(const Tree* const tree);
+// return left child of node
+Tree* leftChildren(Tree* tree);
 
-//change node data 
-void changeData(Tree* const tree, int const data);
+// return data of node
+int data(Tree* tree);
 
-//check for parent
-Tree* checkParent(const Tree* const tree);
+// return parent of node
+Tree* parentNode(Tree* tree);

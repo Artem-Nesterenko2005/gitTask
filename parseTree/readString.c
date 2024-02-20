@@ -4,27 +4,28 @@
 #include "errorCodes.h"
 #include "readString.h"
 
-char* readString(int* const errorCode, const char* const fileName)
+char* readString(int* errorCode, FILE* file)
 {
     size_t length = 0;
     size_t capacity = 1;
-    FILE* expression;
-    fopen_s(&expression, fileName, "r");
     char* string = (char*)malloc(sizeof(char));
     if (string == NULL)
     {
         *errorCode = ERROR_MEMORY;
         return NULL;
     }
-    char symbol = getc(expression);
+
+    char symbol = getc(file);
 
     if (symbol == EOF)
     {
-        *errorCode = EMPTY_FILE;
+        free(string);
+        fclose(file);
+        *errorCode = ERROR_FILE;
         return NULL;
     }
 
-    while (symbol != EOF)
+    while (symbol != EOF && symbol != ' ')
     {
         string[length++] = symbol;
 
@@ -41,7 +42,7 @@ char* readString(int* const errorCode, const char* const fileName)
             string = tmp;
         }
 
-        symbol = getc(expression);
+        symbol = getc(file);
     }
 
     *errorCode = OK_CODE;

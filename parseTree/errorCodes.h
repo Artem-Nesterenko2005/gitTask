@@ -1,11 +1,11 @@
 #pragma once
 
-enum errorCodes
+enum ErrorCodes
 {
     OK_CODE,
     ERROR_TEST,
+    ERROR_FILE,
     ERROR_MEMORY,
-    EMPTY_FILE,
     ZERO_DIVISOR,
     UNCORRECT_SYMBOL
 };
