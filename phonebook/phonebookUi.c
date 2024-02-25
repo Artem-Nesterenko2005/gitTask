@@ -7,8 +7,6 @@
 #include "phonebook.h"
 #include "phonebookUi.h"
 
-#define LIMITATION 100
-
 char* readString(int* errorCode, FILE* file)
 {
     size_t length = 0;
@@ -80,7 +78,6 @@ Phonebook* phonebookCommand(enum UserSelection userSelection, int* errorCode, ch
         char* name = readString(errorCode, stdin);
         if (*errorCode != OK_CODE)
         {
-            delete(&phonebook);
             return phonebook;
         }
         printf("Enter number of new contact ");
@@ -88,7 +85,6 @@ Phonebook* phonebookCommand(enum UserSelection userSelection, int* errorCode, ch
         if (*errorCode != OK_CODE)
         {
             free(name);
-            delete(&phonebook);
             return phonebook;
         }
         phonebook = addData(phonebook, name, number, errorCode);
@@ -164,7 +160,7 @@ Phonebook* phonebookCommand(enum UserSelection userSelection, int* errorCode, ch
             *errorCode = ERROR_FILE;
             return phonebook;
         }
-        saveData(&phonebook, file);
+        saveData(phonebook, file);
         if (file != NULL)
         {
             fclose(file);

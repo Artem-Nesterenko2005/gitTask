@@ -13,14 +13,8 @@ int main(void)
         printf("Error test");
         return ERROR_TEST;
     }
-    FILE* file = NULL;
-    fopen_s(&file, "phonebook.txt", "r");
     int errorCode = OK_CODE;
-    Phonebook* phonebook = load(file, &errorCode);
-    if (file != NULL)
-    {
-        fclose(file);
-    }
+    Phonebook* phonebook = load("phonebook.txt", &errorCode);
     enum UserSelection userSelection = printAll;
     while (userSelection != exits && errorCode == OK_CODE)
     {

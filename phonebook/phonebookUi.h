@@ -2,6 +2,8 @@
 
 #include "phonebook.h"
 
+#define LIMITATION 100
+
 enum UserSelection
 {
     byName = -2,

@@ -2,9 +2,6 @@
 
 #include <stdbool.h>
 
-// struct for node
-typedef struct Node Node;
-
 // struct for phonebook
 typedef struct Phonebook Phonebook;
 
@@ -15,7 +12,7 @@ Phonebook* addData(Phonebook* phonebook, char* name, char* number, int* errorCod
 void printPhonebook(Phonebook* phonebook);
 
 // read files data
-Phonebook* load(FILE* file, int* errorCode);
+Phonebook* load(char* filename, int* errorCode);
 
 // find data by name or by number
 char* findBy(Phonebook* phonebook, char* string, enum UserSelection userSelection);
@@ -24,7 +21,7 @@ char* findBy(Phonebook* phonebook, char* string, enum UserSelection userSelectio
 void delete(Phonebook** phonebook);
 
 // save new data
-void saveData(Phonebook** phonebook, FILE* file);
+void saveData(Phonebook* phonebook, FILE* file);
 
 // check number of contact
 bool checkLimitation(Phonebook* phonebook);

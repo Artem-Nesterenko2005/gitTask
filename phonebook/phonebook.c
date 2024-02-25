@@ -7,8 +7,6 @@
 #include "phonebook.h"
 #include "phonebookUi.h"
 
-#define LIMITATION 100
-
 typedef struct Node
 {
     char* name;
@@ -76,14 +74,16 @@ void printPhonebook(Phonebook* phonebook)
     }
 }
 
-Phonebook* load(FILE* file, int* errorCode)
+Phonebook* load(char* filename, int* errorCode)
 {
+    FILE* file = NULL;
+    fopen_s(&file, filename, "r");
+    Phonebook* phonebook = NULL;
     if (file == NULL)
     {
         *errorCode = ERROR_FILE;
-        return NULL;
+        return phonebook;
     }
-    Phonebook* phonebook = NULL;
     while (!feof(file))
     {
         char* name = readString(errorCode, file);
@@ -93,12 +93,14 @@ Phonebook* load(FILE* file, int* errorCode)
             {
                 *errorCode = OK_CODE;
             }
+            fclose(file);
             return phonebook;
         }
         char* dash = readString(errorCode, file);
         if (*errorCode != OK_CODE)
         {
             free(name);
+            fclose(file);
             return phonebook;
         }
         char* number = readString(errorCode, file);
@@ -106,6 +108,7 @@ Phonebook* load(FILE* file, int* errorCode)
         {
             free(name);
             free(dash);
+            fclose(file);
             return phonebook;
         }
         phonebook = addData(phonebook, name, number, errorCode);
@@ -114,9 +117,11 @@ Phonebook* load(FILE* file, int* errorCode)
             free(name);
             free(dash);
             free(number);
+            fclose(file);
             break;
         }
     }
+    fclose(file);   
     return phonebook;
 }
 
@@ -171,13 +176,13 @@ void delete(Phonebook** phonebook)
     *phonebook = NULL;
 }
 
-void saveData(Phonebook** phonebook, FILE* file)
+void saveData(Phonebook* phonebook, FILE* file)
 {
-    if (*phonebook == NULL)
+    if (phonebook == NULL)
     {
         return;
     }
-    Node* node = (*phonebook)->head;
+    Node* node = phonebook->head;
     while (node != NULL)
     {
         fprintf(file, "%s - %s\n", node->name, node->number);
