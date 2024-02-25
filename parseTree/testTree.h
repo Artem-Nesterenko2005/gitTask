@@ -2,5 +2,5 @@
 
 #include <stdbool.h>
 
-//test for tree
+// test for tree
 bool testTree(void);

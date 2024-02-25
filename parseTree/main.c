@@ -38,21 +38,21 @@ int main(void)
             return ERROR_MEMORY;
         }
 
-        printf("Uncorrect symbol");
-        return UNCORRECT_SYMBOL;
+        printf("Incorrect symbol");
+        return INCORRECT_SYMBOL;
     }
 
     printf("Expression: ");
     printTree(tree);
 
-    printf("\nResult of expression: %d ", resultCalculation(tree, &errorCode));
+    printf("\nResult of expression: %d ", calculateResult(tree, &errorCode));
     if (errorCode != OK_CODE)
     {
         clearTree(tree);
-        if (errorCode == UNCORRECT_SYMBOL)
+        if (errorCode == INCORRECT_SYMBOL)
         {
-            printf("Uncorrect symbol");
-            return UNCORRECT_SYMBOL;
+            printf("Incorrect symbol");
+            return INCORRECT_SYMBOL;
         }
         printf("Error: you can't divide by zero");
         return ZERO_DIVISOR;

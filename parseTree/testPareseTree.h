@@ -1,4 +1,4 @@
 #pragma once
 
-//test for program
+// test for program
 bool testParseTree(void);

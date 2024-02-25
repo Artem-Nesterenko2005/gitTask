@@ -17,14 +17,14 @@ static Tree* addSymbol(Tree* tree, char* data, int* errorCode)
     case '-':
     case '/':
     case '*':
-        tree = addParent(tree, data[0], errorCode);
+        tree = addOperation(tree, data[0], errorCode);
         free(data);
         return tree;
 
     case ')':
-        if (parentNode(parentNode(tree)) != NULL)
+        if (checkParentNode(checkParentNode(tree)) != NULL)
         {
-            tree = parent(tree);
+            tree = returnParent(tree);
         }
         free(data);
         return tree;
@@ -37,11 +37,12 @@ static Tree* addSymbol(Tree* tree, char* data, int* errorCode)
     default:
         if (!isdigit(*data))
         {
-            *errorCode = UNCORRECT_SYMBOL;
+            free(data);
+            *errorCode = INCORRECT_SYMBOL;
             return tree;
         }
 
-        tree = addData(tree, atoi(data), errorCode);
+        tree = addNumber(tree, atoi(data), errorCode);
         free(data);
         return tree;
     }
@@ -56,8 +57,7 @@ Tree* makeTree(char* filename, int* errorCode)
         *errorCode = ERROR_FILE;
         return NULL;
     }
-    Tree* tree = NULL;
-    tree = makeNode();
+    Tree* tree = makeNode();
     if (tree == NULL)
     {
         *errorCode = ERROR_MEMORY;

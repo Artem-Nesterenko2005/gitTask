@@ -20,7 +20,7 @@ Tree* makeNode(void)
     return (Tree*)calloc(1, sizeof(Tree));
 }
 
-Tree* addData(Tree* tree, const int data, int* errorCode)
+Tree* addNumber(Tree* tree, const int data, int* errorCode)
 {
     if (tree->leftChild == NULL)
     {
@@ -34,23 +34,27 @@ Tree* addData(Tree* tree, const int data, int* errorCode)
         tree->leftChild->parent = tree;
         return tree;
     }
-    tree->rightChild = (Tree*)calloc(1, sizeof(Tree));
+
     if (tree->rightChild == NULL)
     {
-        *errorCode = ERROR_MEMORY;
-        return NULL;
+        tree->rightChild = (Tree*)calloc(1, sizeof(Tree));
+        if (tree->rightChild == NULL)
+        {
+            *errorCode = ERROR_MEMORY;
+            return NULL;
+        }
+        tree->rightChild->data = data;
+        tree->rightChild->parent = tree;
+        return tree;
     }
-    tree->rightChild->data = data;
-    tree->rightChild->parent = tree;
-    return tree;
 }
 
-Tree* parent(const Tree* const tree)
+Tree* returnParent(const Tree* const tree)
 {
     return tree->parent;
 }
 
-Tree* addParent(Tree* tree, char data, int* errorCode)
+Tree* addOperation(Tree* tree, char data, int* errorCode)
 {
     if (tree->leftChild == NULL)
     {
@@ -129,18 +133,18 @@ void printTree(const Tree* const tree)
     }
 }
 
-int resultCalculation(Tree* tree, int* errorCode)
+int calculateResult(Tree* tree, int* errorCode)
 {
     if (tree->leftChild == NULL)
     {
         return tree->data;
     }
-    const int number1 = resultCalculation(tree->leftChild, errorCode);
+    const int number1 = calculateResult(tree->leftChild, errorCode);
     if (*errorCode != OK_CODE)
     {
         return 0;
     }
-    const int number2 = resultCalculation(tree->rightChild, errorCode);
+    const int number2 = calculateResult(tree->rightChild, errorCode);
     if (*errorCode != OK_CODE)
     {
         return 0;
@@ -150,21 +154,13 @@ int resultCalculation(Tree* tree, int* errorCode)
     switch (operation)
     {
     case '*':
-        if (*errorCode != OK_CODE)
-        {
-            return 0;
-        }
         return number1 * number2;
 
     case '+':
-        if (*errorCode != OK_CODE)
-        {
-            return 0;
-        }
         return number1 + number2;
 
     case '/':
-        if (number2 == 0 || *errorCode != OK_CODE)
+        if (number2 == 0)
         {
             *errorCode = ZERO_DIVISOR;
             return 0;
@@ -172,34 +168,30 @@ int resultCalculation(Tree* tree, int* errorCode)
         return number1 / number2;
 
     case '-':
-        if (*errorCode != OK_CODE)
-        {
-            return 0;
-        }
         return number1 - number2;
 
     default:
-        *errorCode = UNCORRECT_SYMBOL;
-        return UNCORRECT_SYMBOL;
+        *errorCode = INCORRECT_SYMBOL;
+        return 0;
     }
 }
 
-Tree* rightChildren(Tree* tree)
+Tree* checkRightChildren(Tree* tree)
 {
     return tree->rightChild;
 }
 
-Tree* leftChildren(Tree* tree)
+Tree* checkLeftChildren(Tree* tree)
 {
     return tree->leftChild;
 }
 
-int data(Tree* tree)
+int checkData(Tree* tree)
 {
     return tree->data;
 }
 
-Tree* parentNode(Tree* tree)
+Tree* checkParentNode(Tree* tree)
 {
     return tree->parent;
 }

@@ -8,16 +8,15 @@
 
 bool testTree(void)
 {
-    Tree* tree = NULL;
-    tree = makeNode();
+    Tree* tree = makeNode();
     if (tree == NULL)
     {
         printf("Error test number 1\n");
         return false;
     }
     int errorCode = OK_CODE;
-    tree = addData(tree, 1, &errorCode);
-    if (data(leftChildren(tree)) != 1 || errorCode != OK_CODE)
+    tree = addNumber(tree, 1, &errorCode);
+    if (checkData(checkLeftChildren(tree)) != 1 || errorCode != OK_CODE)
     {
         printf("Error test number 2\n");
         clearTree(tree);

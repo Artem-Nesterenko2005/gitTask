@@ -1,37 +1,37 @@
 #pragma once
 
-//struct for tree
+// struct for tree
 typedef struct Tree Tree;
 
-//create root of tree
+// create root of tree
 Tree* makeNode(void);
 
-//add numbers
-Tree* addData(Tree* tree, const int data, int* errorCode);
+// add numbers
+Tree* addNumber(Tree* tree, const int data, int* errorCode);
 
-//return to parent
-Tree* parent(const Tree* const tree);
+// return to parent
+Tree* returnParent(const Tree* const tree);
 
-//add operation
-Tree* addParent(Tree* tree, char data, int* errorCode);
+// add operation
+Tree* addOperation(Tree* tree, char data, int* errorCode);
 
-//clear tree nodes
+// clear tree nodes
 void clearTree(Tree* tree);
 
-//print tree
+// print tree
 void printTree(const Tree* const tree);
 
 // calculates the result of an expression by traversing the tree
-int resultCalculation(Tree* tree, int* const errorCode);
+int calculateResult(Tree* tree, int* const errorCode);
 
 // return right child of node
-Tree* rightChildren(Tree* tree);
+Tree* checkRightChildren(Tree* tree);
 
 // return left child of node
-Tree* leftChildren(Tree* tree);
+Tree* checkLeftChildren(Tree* tree);
 
 // return data of node
-int data(Tree* tree);
+int checkData(Tree* tree);
 
 // return parent of node
-Tree* parentNode(Tree* tree);
+Tree* checkParentNode(Tree* tree);

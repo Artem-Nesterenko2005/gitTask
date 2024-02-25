@@ -7,5 +7,5 @@ enum ErrorCodes
     ERROR_FILE,
     ERROR_MEMORY,
     ZERO_DIVISOR,
-    UNCORRECT_SYMBOL
+    INCORRECT_SYMBOL
 };

@@ -2,5 +2,5 @@
 
 #include "tree.h"
 
-//make tree
+// make tree
 Tree* makeTree(char* filename, int* errorCode);
