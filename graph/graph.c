@@ -160,7 +160,7 @@ Graph* assignmentCities(Graph* graph)
             int* stateCity = graph->states[j].cities;
             int nearestCity = 0;
 
-            for (int t = 0; t < graph->startData->citiesNumber; ++t)
+            for (size_t t = 0; t < graph->startData->citiesNumber; ++t)
             {
                 if (graph->nonStates[t] != 0)
                 {
@@ -175,7 +175,7 @@ Graph* assignmentCities(Graph* graph)
                     }
 
                     int numberPath = -1;
-                    for (int k = 0; k < graph->startData->pathsNumber; ++k)
+                    for (size_t k = 0; k < graph->startData->pathsNumber; ++k)
                     {
                         if ((graph->paths[k].first == t + 1 && graph->paths[k].second == stateCity[m]) || (graph->paths[k].second == t + 1 && graph->paths[k].first == stateCity[m]))
                         {
