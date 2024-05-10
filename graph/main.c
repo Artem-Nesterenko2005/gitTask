@@ -13,7 +13,8 @@ int main(void)
         return ERROR_TEST;
     }
     int errorCode = OK_CODE;
-    Graph* graph = readFile(&errorCode, "file.txt");
+    StartData* startData = NULL;
+    Graph* graph = readFile(&errorCode, "file.txt", &startData);
     if (errorCode != OK_CODE)
     {
         if (errorCode == ERROR_MEMORY)
@@ -21,12 +22,19 @@ int main(void)
             printf("Error memory");
             return ERROR_MEMORY;
         }
+        if (errorCode == INCORRECT_SYMBOL)
+        {
+            printf("Incorrect symbol in file");
+            return INCORRECT_SYMBOL;
+        }
         printf("Error file");
         return ERROR_FILE;
     }
 
-    graph = assignmentCities(graph);
-    print(graph);
-    deleteStruct(graph);
+    char* result = assignCities(graph, startData, &errorCode);
+    deleteStruct(&graph);
+    free(startData);
+    printf("%s", result);
+    free(result);
     return OK_CODE;
 }

@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include <stdbool.h>
 
 #include "errorCode.h"
@@ -9,13 +10,14 @@
 bool test(void)
 {
     int errorCode = OK_CODE;
-    Graph* graph = readFile(&errorCode, "test.txt");
+    StartData* startData = NULL;
+    Graph* graph = readFile(&errorCode, "test.txt", &startData);
     if (errorCode != OK_CODE)
     {
         return false;
     }
-    graph = assignmentCities(graph);
-    bool result = checkTest(graph);
-    deleteStruct(graph);
-    return result;
+    char* result = assignCities(graph, startData, &errorCode);
+    deleteStruct(&graph);
+    free(startData);
+    return strcmp(result, "1: 1 2 \n3:3 ") && errorCode == OK_CODE;
 }
